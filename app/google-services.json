@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "555485771498",
+    "firebase_url": "https://swibud-a039e.firebaseio.com",
+    "project_id": "swibud-a039e",
+    "storage_bucket": "swibud-a039e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555485771498:android:7730bc64242fc1e7",
+        "android_client_info": {
+          "package_name": "com.dev.swibud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555485771498-mjfb3oqkqif5gm9553d1o9iubfj92reu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev.swibud",
+            "certificate_hash": "3cd5616c1113937a3f7ddaf6b083ad8fdf65825e"
+          }
+        },
+        {
+          "client_id": "555485771498-1o78j88s5tua2pqm1tsiq63v9vvtu8sh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa9gFaDIOlz3iKp6GLrwkU7B9GwE6IqAk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555485771498-1o78j88s5tua2pqm1tsiq63v9vvtu8sh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

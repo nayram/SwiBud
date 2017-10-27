@@ -48,6 +48,7 @@ public class Devless extends AppCompatActivity implements Serializable{
     Context mContext;
     private String rootUrl, token, devlessUserToken="", where = "", orderBy="id", empty;
     private int size = -1 ;
+    private static String TAG="Devless";
 
 
     public Devless(Context mContext, String rootUrl, String token) {
@@ -95,11 +96,67 @@ public class Devless extends AppCompatActivity implements Serializable{
         });
     }
 
+    public void postMassData(String serviceName, String tableName,  ArrayList<Map<String,Object>> dataToAdd, final PostDataResponse requestResponseresponse){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(DevlessBuilder.formUrl(rootUrl, serviceName))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        POSTAPI postapi = retrofit.create(POSTAPI.class);
+        Call<ResponseBody> result = postapi.sendPosts("db?table="+tableName,
+                token, devlessUserToken ,DevlessBuilder.createMultiAssign(tableName, dataToAdd));
+
+
+        result.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+
+                    String result = response.body().string();
+                    Log.d(TAG,"Invites response "+response.body().string());
+                    boolean bool = DevlessBuilder.checkAuth(result);
+                    if (bool){
+
+                        int successPull = DevlessBuilder.checkPostSuccess(result);
+                        Log.d(TAG,"Devless Edit "+result);
+                        if(successPull == 1){
+                            // successful
+                            requestResponseresponse.onSuccess(new ResponsePayload(result));
+
+                        } else if (successPull == 0){
+                            //wrong fieldname
+                            String errorMessage = "Error: Post failed because there was a  wrong fieldName please check it";
+                            requestResponseresponse.onFailed(new ErrorMessage(errorMessage));
+
+                        } else {
+                            // errorMessage
+                            String errorMessage = "Error: The ServiceName or TableName doesn't exist";
+                            requestResponseresponse.onFailed(new ErrorMessage(errorMessage));
+                        }
+
+
+                    }  else{
+                        requestResponseresponse.userNotAuthenticated( new ErrorMessage("Token expired please log in again"));
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                requestResponseresponse.onSuccess( new ResponsePayload( t.toString()));
+            }
+        });
+    }
+
     public void postData(String serviceName, String tableName,  Map<String, Object> dataToAdd, final PostDataResponse requestResponseresponse) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DevlessBuilder.formUrl(rootUrl, serviceName))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
         POSTAPI postapi = retrofit.create(POSTAPI.class);
         Call<ResponseBody> result = postapi.sendPosts("db?table="+tableName,
                 token, devlessUserToken ,DevlessBuilder.createPostBody(tableName, dataToAdd));
@@ -114,6 +171,7 @@ public class Devless extends AppCompatActivity implements Serializable{
                     if (bool){
 
                         int successPull = DevlessBuilder.checkPostSuccess(result);
+                        Log.d(TAG,"Devless Edit "+result);
                         if(successPull == 1){
                             // successful
                             requestResponseresponse.onSuccess(new ResponsePayload(result));
@@ -162,6 +220,7 @@ public class Devless extends AppCompatActivity implements Serializable{
                     boolean bool = DevlessBuilder.checkAuth(result);
                     if (bool){
                         int successPull = DevlessBuilder.checkPostSuccess(result);
+                        Log.d(TAG,"Devless Edit Result "+result);
                         if(successPull == 1){
                             // successful
                             requestResponseresponse.onSuccess(new ResponsePayload(result));

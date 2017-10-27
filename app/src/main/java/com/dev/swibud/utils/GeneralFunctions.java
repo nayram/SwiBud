@@ -85,4 +85,40 @@ public class GeneralFunctions {
         SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
         return sharedPreferences.getInt(Constants.USERID,0);
     }
+
+    public static void setLatitude(Context ctx,float lat){
+        SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putFloat(Constants.LAT,lat);
+        editor.commit();
+    }
+
+    public static void setLongitude(Context ctx,float lng){
+        SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putFloat(Constants.LNG,lng);
+        editor.commit();
+    }
+
+    public static float getLongitude(Context ctx){
+        SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
+        return sharedPreferences.getFloat(Constants.LNG,0);
+    }
+
+    public static float getLatitude(Context ctx){
+        SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
+        return sharedPreferences.getFloat(Constants.LAT,0);
+    }
+
+    public static void setUserExtraDetail(Context ctx,String profile){
+        SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString(Constants.USER_EXTRA_DETAIL,profile);
+        editor.commit();
+    }
+
+    public static String getUserExtraDetail(Context ctx){
+        SharedPreferences sharedPreferences=ctx.getSharedPreferences(ctx.getPackageName(),Context.MODE_PRIVATE);
+        return sharedPreferences.getString(Constants.USER_EXTRA_DETAIL,null);
+    }
 }

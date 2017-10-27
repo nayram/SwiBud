@@ -22,8 +22,10 @@ import com.dev.swibud.R;
 import com.dev.swibud.activities.HomeActivity;
 import com.dev.swibud.activities.MainActivity;
 import com.dev.swibud.interfaces.AuthInterface;
+import com.dev.swibud.pojo.ExtraUserProfile;
 import com.dev.swibud.pojo.Users;
 import com.dev.swibud.utils.App;
+import com.dev.swibud.utils.Constants;
 import com.dev.swibud.utils.GeneralFunctions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,10 +44,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import androidsdk.devless.io.devless.interfaces.LoginResponse;
 import androidsdk.devless.io.devless.interfaces.RequestResponse;
+import androidsdk.devless.io.devless.interfaces.SearchResponse;
 import androidsdk.devless.io.devless.interfaces.SignUpResponse;
 import androidsdk.devless.io.devless.main.Devless;
 import androidsdk.devless.io.devless.messages.ErrorMessage;
@@ -101,7 +106,7 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     @OnClick(R.id.fabNext) void next(){
 
-        if (!edtPhone.getText().toString().trim().isEmpty() && edtPhone.getText().toString().trim().length() ==10) {
+        if (!edtPhone.getText().toString().trim().isEmpty() && edtPhone.getText().toString().trim().length() <=10) {
             pDialog.show();
             if (!isVerificationStage){
                 isVerificationStage=true;
@@ -131,15 +136,7 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     @OnClick(R.id.imgBack) void back(){
         getActivity().finish();
-       /* if (!isVerificationStage)
-        getActivity().onBackPressed();
-        else{
-            isVerificationStage=false;
-            tvCaption.setText("Enter your phone number :");
-            llVerification.setVisibility(View.GONE);
-            llPhoneNumber.setVisibility(View.VISIBLE);
-        }*/
-        //authCallback.removeFragment();
+
     }
 
     @OnClick(R.id.btnResendCode) void resendCode(){
@@ -204,7 +201,6 @@ public class PhoneNumberAuthFragment extends Fragment {
                 llVerification.setVisibility(View.VISIBLE);
                 llPhoneNumber.setVisibility(View.GONE);
                 pDialog.dismiss();
-               // PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, );
             }
         };
 
@@ -219,22 +215,14 @@ public class PhoneNumberAuthFragment extends Fragment {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        pDialog.dismiss();
-                        if (task.isSuccessful()) {
 
-                            // Sign in success, update UI with the signed-in user's information
+                        if (task.isSuccessful()) {
                             Log.d("PhoneVERifier", "signInWithCredential:success");
                             signUpUser();
-                            //finish();
-                           // FirebaseUser user = task.getResult().getUser();
-                            //FirebaseAuth.getInstance().signOut();
-                            //Toast.makeText(getActivity(), "Verified succesfully", Toast.LENGTH_SHORT).show();
-                            // ...
                         } else {
-                            // Sign in failed, display a message and update the UI
                             Log.w("PhoneVERifier", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
+                                pDialog.dismiss();
                                 Toast.makeText(getActivity(), "Verification code is invalid", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -244,37 +232,16 @@ public class PhoneNumberAuthFragment extends Fragment {
 
 
     void loginUser(){
-        Toast.makeText(ctx, "Login user", Toast.LENGTH_SHORT).show();
         ArrayList<String> list=new ArrayList<>(Arrays.asList(null,
                 ccp.getFullNumberWithPlus() + edtPhone.getText(),null,
                 edtPhone.getText().toString(),null,null,null
         ));
 
-       /* App.devless.methodCall("devless", "signUp", list, new RequestResponse() {
-            @Override
-            public void onSuccess(ResponsePayload responsePayload) {
-                Users.UsersResults user=new Gson().fromJson(responsePayload.toString(),Users.UsersResults.class);
-
-                Log.d("LogInSuccess",responsePayload.toString());
-                GeneralFunctions.saveUser(new Gson().toJson(user.results),getActivity());
-
-                ProfileFragment profileFragment=new ProfileFragment();
-                Bundle basket=new Bundle();
-                basket.putBoolean("Auth",true);
-                GeneralFunctions.addFragmentFromRight(getActivity().getSupportFragmentManager(),profileFragment,R.id.llHomeContainer);
-
-            }
-
-            @Override
-            public void userNotAuthenticated(ErrorMessage errorMessage) {
-
-            }
-        });*/
-
         App.devless.loginWithPhoneNumberAndPassword(ccp.getFullNumberWithPlus() + edtPhone.getText(),
                 edtPhone.getText().toString(), App.sp, new LoginResponse() {
             @Override
             public void onLogInSuccess(ResponsePayload payload) {
+
                 try {
                     JSONObject jsob=new JSONObject(payload.toString());
                     Log.d(TAG+" Login",jsob.toString());
@@ -283,19 +250,59 @@ public class PhoneNumberAuthFragment extends Fragment {
 
                     GeneralFunctions.setUserId(getActivity(),results.getInt("id"));
                     //launchProfile();
-                    startActivity(new Intent(getActivity(),MainActivity.class));
-                    getActivity().finish();
+                    getUserData();
+
 
                 } catch (JSONException e) {
+                    pDialog.dismiss();
                     e.printStackTrace();
+                    Toast.makeText(ctx, "Log in failed! Try again", Toast.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
             public void onLogInFailed(ErrorMessage errorMessage) {
+                pDialog.dismiss();
                Log.e("LoginFailed","LoginFailed "+errorMessage.toString());
-                Toast.makeText(ctx, "Login user failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, "Log in failed! Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void getUserData(){
+        Map<String, Object> params = new HashMap<>();
+        params.put("where","users_id,"+GeneralFunctions.getUserId(getContext()));
+        App.devless.search("UserExraDetails", "user_extra_details", params, new SearchResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                pDialog.dismiss();
+                try {
+                    JSONObject jsonObject=new JSONObject(response.toString());
+                    if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0){
+
+                        JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
+                        ExtraUserProfile extraUserProfile=new ExtraUserProfile(profile.getDouble(Constants.LAT),
+                                profile.getDouble(Constants.LNG),profile.getString(Constants.USER_IMAGE),profile.getInt(Constants.ID));
+                        GeneralFunctions.setUserExtraDetail(getContext(),new Gson().toJson(extraUserProfile));
+                        GeneralFunctions.saveUserImage(profile.getString(Constants.USER_IMAGE),getContext());
+
+                    }
+
+                }catch (JSONException ex){
+                    ex.printStackTrace();
+                }
+
+                startActivity(new Intent(getActivity(),MainActivity.class));
+                getActivity().finish();
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage errorMessage) {
+                Log.d(TAG,errorMessage.toString());
+                pDialog.dismiss();
+                startActivity(new Intent(getActivity(),MainActivity.class));
+                getActivity().finish();
             }
         });
     }
@@ -306,6 +313,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                 edtPhone.getText().toString(), App.sp, new SignUpResponse() {
                     @Override
                     public void onSignUpSuccess(Payload payload) {
+                        pDialog.dismiss();
                         Log.d("SignUpSuccess",new Gson().toJson(payload.toString()));
                         try {
                             JSONObject jobj=new JSONObject(payload.toString());
@@ -316,17 +324,9 @@ public class PhoneNumberAuthFragment extends Fragment {
                             launchProfile();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(ctx, "Sign up failed. Try again!", Toast.LENGTH_SHORT).show();
                         }
-                       /* Users.UsersResults user=new Gson().fromJson(payload.toString(),Users.UsersResults.class);
-                        Toast.makeText(ctx, user, Toast.LENGTH_SHORT).show();Log*/
-                        //Log.d(TAG,new Gson().toJson(user.results));
-
-                        /*GeneralFunctions.saveUser(new Gson().toJson(user.results),getActivity());
-                        ProfileFragment profileFragment=new ProfileFragment();
-                        Bundle basket=new Bundle();
-                        basket.putBoolean("Auth",true);
-                        GeneralFunctions.addFragmentFromRight(getActivity().getSupportFragmentManager(),profileFragment,R.id.llHomeContainer);
-                    */}
+                    }
 
                     @Override
                     public void onSignUpFailed(ErrorMessage errorMessage) {

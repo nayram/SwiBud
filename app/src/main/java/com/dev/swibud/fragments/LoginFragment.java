@@ -113,9 +113,5 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
 
-    }
 }

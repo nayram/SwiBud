@@ -4,6 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.cloudinary.android.MediaManager;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import androidsdk.devless.io.devless.main.Devless;
 
 /**
@@ -19,6 +24,9 @@ public class App extends Application {
         super.onCreate();
         sp= getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         devless = new Devless(this, Constants.AppUrl, Constants.token);
+        Map config = new HashMap();
+        config.put("cloud_name", "swibud");
+        MediaManager.init(this, config);
         //devless.addUserToken(sp);
 
     }

@@ -36,6 +36,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.dev.swibud.R;
 import com.dev.swibud.interfaces.MainServiceInterface;
+import com.dev.swibud.pojo.ExtraUserProfile;
+import com.dev.swibud.utils.App;
+import com.dev.swibud.utils.Constants;
+import com.dev.swibud.utils.GeneralFunctions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -62,6 +66,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import androidsdk.devless.io.devless.interfaces.EditDataResponse;
+import androidsdk.devless.io.devless.interfaces.PostDataResponse;
+import androidsdk.devless.io.devless.interfaces.SearchResponse;
+import androidsdk.devless.io.devless.messages.ErrorMessage;
+import androidsdk.devless.io.devless.messages.ResponsePayload;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -81,6 +96,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     Location mLastKnownLocation;
     float DEFAULT_ZOOM= 14;
 
+    String serviceName="UserExraDetails";
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -90,7 +106,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     MainServiceInterface authCallback;
     Context ctx;
 
-    private GoogleApiClient googleApiClient;
+    public GoogleApiClient googleApiClient;
     private final static int REQUEST_CHECK_SETTINGS_GPS=0x1;
     private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
 
@@ -99,13 +115,13 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
 
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.fragment_map,container,false);
         ButterKnife.bind(this,rootView);
-        setUpGClient();
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
 
         return rootView;
     }
@@ -113,6 +129,8 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        setUpGClient();setUpGClient
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         getLocationPermission();
         SupportMapFragment fragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
@@ -248,7 +266,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
 
     }
 
-    private void updateLocationUI() {
+    public void updateLocationUI() {
         if (mMap == null) {
             //Toast.makeText(getActivity(), "Set your ", Toast.LENGTH_SHORT).show();
             return;
@@ -269,7 +287,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
         }
     }
 
-    private void getDeviceLocation() {
+    public void getDeviceLocation() {
     /*
      * Get the best and most recent location of the device, which may be null in rare
      * cases when a location is not available.
@@ -344,9 +362,16 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
                             if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
                                 mLastKnownLocation = LocationServices.FusedLocationApi
                                         .getLastLocation(googleApiClient);
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                if (mLastKnownLocation!=null){
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(mLastKnownLocation.getLatitude(),
+                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                    GeneralFunctions.setLatitude(getContext(), (float) mLastKnownLocation.getLatitude());
+                                    GeneralFunctions.setLongitude(getContext(), (float) mLastKnownLocation.getLongitude());
+                                    checkUserIdAvailability();
+                                    //setUserLocation(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLatitude());
+                                }
+
                             }
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -376,6 +401,26 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+       // getMyLocation();
+
+    }
+
+    private synchronized void setUpGClient() {
+        if (googleApiClient==null){
+            googleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .enableAutoManage(getActivity(),0, this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            googleApiClient.connect();
+        }
+
+    }
+
+    @Override
     public boolean onMarkerClick(Marker marker) {
 
         switch (marker.getId()){
@@ -392,7 +437,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
         return false;
     }
 
-    private void getLocationPermission() {
+    public void getLocationPermission() {
     /*
      * Request location permission, so that we can get the location of the
      * device. The result of the permission request is handled by a callback,
@@ -416,6 +461,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     public void onAttach(Context context) {
         super.onAttach(context);
         ctx=context;
+
         if (context instanceof MainServiceInterface) {
             authCallback = (MainServiceInterface) context;
         } else {
@@ -425,20 +471,13 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
 
     }
 
+
+
+
     @Override
     public void onDetach() {
         super.onDetach();
         authCallback = null;
-    }
-
-    private synchronized void setUpGClient() {
-        googleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity(), 0, this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
     }
 
 
@@ -451,6 +490,37 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     public void onConnectionSuspended(int i) {
 
     }
+
+   /* @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.stopAutoManage(getActivity());
+            googleApiClient.disconnect();
+            Log.d(TAG, "On Destroy");
+        }
+    }*/
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            //Toast.makeText(ctx, "On Pause", Toast.LENGTH_SHORT).show();
+            googleApiClient.stopAutoManage(getActivity());
+            googleApiClient.disconnect();
+        }else{
+            //Toast.makeText(ctx, "Second- On Pause", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+   /* @Override
+    public void onStop() {
+        super.onStop();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.stopAutoManage(getActivity());
+            googleApiClient.disconnect();
+        }
+    }*/
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -491,6 +561,125 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     }
 
     void setUserLocation(double latitude,double longitude){
+        int id=GeneralFunctions.getUserId(getContext());
+        Map<String, Object> dataToPost = new HashMap<>();
+        dataToPost.put("lat",latitude);
+        dataToPost.put("lng",longitude);
+        dataToPost.put("user_id",id);
 
+        showProgress(true);
+        App.devless.postData("location", "user_location", dataToPost, new PostDataResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                Log.d(TAG,response.toString());
+            }
+
+            @Override
+            public void onFailed(ErrorMessage errorMessage) {
+                Log.d(TAG,errorMessage.toString());
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage message) {
+                Log.d(TAG,message.toString());
+            }
+        });
+
+
+    }
+
+    void checkUserIdAvailability(){
+        Map<String, Object> params = new HashMap<>();
+        params.put("where","users_id,"+GeneralFunctions.getUserId(getActivity()));
+        App.devless.search(serviceName, "user_extra_details", params, new SearchResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+               // hideProgress();
+                Log.d(TAG,response.toString());
+                try {
+                    JSONObject jsonObject=new JSONObject(response.toString());
+                    if (GeneralFunctions.getUserExtraDetail(getContext())==null){
+                        if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0){
+                            JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
+                            ExtraUserProfile eup=new ExtraUserProfile(profile.getDouble("latitude"),
+                                    profile.getDouble("longitude"),profile.getString("user_image"),profile.getInt("id"));
+                            GeneralFunctions.setUserExtraDetail(getContext(),new Gson().toJson(eup));
+                        }
+                    }
+                    if (jsonObject.getJSONObject("payload").getJSONArray("results").length()>0){
+
+                        updateService();
+                    }else{
+                        saveToService();
+                    }
+
+                } catch (JSONException e) {
+                    //hideProgress();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage errorMessage) {
+                Log.d(TAG,errorMessage.toString());
+            }
+        });
+    }
+
+    void saveToService(){
+        Map<String, Object> params = new HashMap<>();
+        params.put("users_id",String.valueOf(GeneralFunctions.getUserId(getContext())));
+        params.put("user_image",GeneralFunctions.getUserImage(getContext()));
+        params.put("longitude",mLastKnownLocation.getLongitude());
+        params.put("latitude",mLastKnownLocation.getLatitude());
+        Log.d(TAG,params.toString());
+        App.devless.postData(serviceName, "user_extra_details", params, new PostDataResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                //hideProgress();
+
+                Log.d(TAG,response.toString());
+            }
+
+            @Override
+            public void onFailed(ErrorMessage errorMessage) {
+                //hideProgress();
+                Log.d(TAG,errorMessage.toString());
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage message) {
+                //hideProgress();
+                Log.d(TAG,message.toString());
+            }
+        });
+    }
+
+    void updateService(){
+        Map<String, Object> params = new HashMap<>();
+        // params.put("users_id",GeneralFunctions.getUserId(getContext()));
+        params.put("user_image",GeneralFunctions.getUserImage(getContext()));
+        params.put("longitude",mLastKnownLocation.getLongitude());
+        params.put("latitude",mLastKnownLocation.getLatitude());
+        params.put("where","id,"+GeneralFunctions.getUserId(getContext()));
+        App.devless.edit(serviceName, "user_extra_details", params, GeneralFunctions.getUser(getContext()), new EditDataResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+
+                Log.d(TAG,response.toString());
+            }
+
+            @Override
+            public void onFailed(ErrorMessage errorMessage) {
+                //hideProgress();
+                Log.d(TAG,errorMessage.toString());
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage message) {
+                //hideProgress();
+                Log.d(TAG,message.toString());
+            }
+        });
     }
 }

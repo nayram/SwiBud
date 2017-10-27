@@ -6,5 +6,7 @@
     <color name="green">#07ce07</color>
     <color name="trans_purple">#ceba9df4</color>
     <color name="white">#fff</color>
+    <color name="trams_black">#95000000</color>
+    <color name="black">#000</color>
 
 </resources>

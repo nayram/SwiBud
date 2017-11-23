@@ -13,6 +13,8 @@ public  class Constants {
     public static final String ACCOUNT = "account";
     public static final String MEETUP = "meetup";
     public static final String CONTACTS = "contacts";
+    public static final String FOLLOWERS = "followers";
+    public static final String RESPONSE_PAYLOAD="responsePayload";
 
     static public String AppUrl="http://swibud.herokuapp.com/";
     static public String token="d9d2461b1d22a74e4a6a16efbf2ce3ec";
@@ -20,10 +22,12 @@ public  class Constants {
     static public String IMAGE="image";
     static public String Token="";
     static public String Result="results";
+    static public String PayloadResult="result";
     static public String Payload="payload";
     static public String EntryId="entry_id";
 
     public static String USERID="user_id";
     public static String USER_EXTRA_DETAIL="user_extra_detail";
     public static String DISPLAY_FRIENDS_ON_MAP="display_friends_on_map";
+    public static String FOLLOWING ="following";
 }

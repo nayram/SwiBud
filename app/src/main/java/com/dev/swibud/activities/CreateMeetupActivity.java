@@ -81,28 +81,40 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
 
     @BindView(R.id.tool_bar)
     Toolbar toolbar;
+
     @BindView(R.id.bottom_sheet_toolbar)
     Toolbar bottom_sheet_toolbar;
+
     @BindView(R.id.edtTitle)
     EditText edtTitle;
+
     @BindView(R.id.edtDate)
     EditText edtDate;
+
     @BindView(R.id.autoCompLocation)
     AutoCompleteTextView autLocation;
+
     @BindView(R.id.edtTime)
     EditText edtTime;
+
     @BindView(R.id.edtDetails)
     EditText edtDetails;
+
     @BindView(R.id.tvAddPeople)
     LinearLayout tvAllPeople;
+
     @BindView(R.id.rlBottomSheet)
     RelativeLayout rlBottomSheet;
+
     @BindView(R.id.recInviteContacts)
     RecyclerView recInviteContacts;
+
     @BindView(R.id.pgLoadContacts)
     ProgressBar pgLoadContacts;
+
     @BindView(R.id.pgCreateMeetup)
     ProgressBar pgCreateMeetup;
+
     @BindView(R.id.llGuests)
     LinearLayout llGuests;
 
@@ -133,7 +145,6 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
     Map<String,JSONObject> setInvites=new HashMap<>();
 
     LatLng latlng;
-
 
     @OnClick(R.id.tvAddPeople) void launchBottomSheets(){
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);

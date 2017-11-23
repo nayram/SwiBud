@@ -41,9 +41,7 @@
             android:text="Welcome, Let's Get Started"
             android:textSize="16dp"
             android:layout_marginTop="20dp"
-
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"

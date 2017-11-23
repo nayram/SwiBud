@@ -245,9 +245,6 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
             }
         });
 
-
-
-
     }
 
     @Override
@@ -598,7 +595,8 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
                 Log.d(TAG,response.toString());
                 try {
                     JSONObject jsonObject=new JSONObject(response.toString());
-                    if (GeneralFunctions.getUserExtraDetail(getContext())==null){
+                    String userobjParam=GeneralFunctions.getUserExtraDetail(getActivity());
+                    if (userobjParam==null){
                         if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0){
                             JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
                             ExtraUserProfile eup=new ExtraUserProfile(profile.getDouble("latitude"),

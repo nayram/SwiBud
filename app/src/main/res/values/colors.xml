@@ -8,5 +8,6 @@
     <color name="white">#fff</color>
     <color name="trams_black">#95000000</color>
     <color name="black">#000</color>
+    <color name="red">#ed1717</color>
 
 </resources>

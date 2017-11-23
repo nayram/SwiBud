@@ -111,7 +111,7 @@ public class PhoneNumberAuthFragment extends Fragment {
             if (!isVerificationStage){
                 isVerificationStage=true;
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        ccp.getFullNumberWithPlus() + edtPhone.getText().toString(),        // Phone number to verify
+                        ccp.getFullNumber() + edtPhone.getText().toString(),        // Phone number to verify
                         60,                 // Timeout duration
                         TimeUnit.SECONDS,   // Unit of timeout
                         getActivity(),               // Activity (for callback binding)
@@ -143,7 +143,7 @@ public class PhoneNumberAuthFragment extends Fragment {
         isVerificationStage=true;
         pDialog.show();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                ccp.getFullNumberWithPlus()+edtPhone.getText().toString(),        // Phone number to verify
+                ccp.getFullNumber()+edtPhone.getText().toString(),        // Phone number to verify
                 60,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 getActivity(),               // Activity (for callback binding)
@@ -232,12 +232,15 @@ public class PhoneNumberAuthFragment extends Fragment {
 
 
     void loginUser(){
+
         ArrayList<String> list=new ArrayList<>(Arrays.asList(null,
-                ccp.getFullNumberWithPlus() + edtPhone.getText(),null,
+                ccp.getFullNumber() + edtPhone.getText(),null,
                 edtPhone.getText().toString(),null,null,null
         ));
 
-        App.devless.loginWithPhoneNumberAndPassword(ccp.getFullNumberWithPlus() + edtPhone.getText(),
+        Log.d(TAG,"Phone number "+ccp.getFullNumber()+edtPhone.getText().toString());
+
+        App.devless.loginWithPhoneNumberAndPassword(ccp.getFullNumber() + edtPhone.getText().toString(),
                 edtPhone.getText().toString(), App.sp, new LoginResponse() {
             @Override
             public void onLogInSuccess(ResponsePayload payload) {
@@ -309,7 +312,7 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     void signUpUser(){
         //Log.d(TAG,"Phone number "+ccp.getFullNumberWithPlus()+edtPhone.getText().toString());
-        App.devless.signUpWithPhoneNumberAndPassword(ccp.getFullNumberWithPlus() + edtPhone.getText().toString(),
+        App.devless.signUpWithPhoneNumberAndPassword(ccp.getFullNumber() + edtPhone.getText().toString(),
                 edtPhone.getText().toString(), App.sp, new SignUpResponse() {
                     @Override
                     public void onSignUpSuccess(Payload payload) {

@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:id="@+id/edtSearch"
+        android:background="@drawable/box_edittext_bg"
+        android:drawableRight="@drawable/ic_action_search"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recView"/>
+        android:id="@+id/recView"
+        android:layout_below="@+id/edtSearch"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -18,4 +34,161 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"/>
 
-</RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/rlBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:behavior_peekHeight="0dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="@string/string_bottom_sheet_behavior">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="5dp"
+                android:layout_marginTop="50dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="50dp">
+
+                        <Button
+                            android:id="@+id/btnFollow"
+                            android:layout_width="150dp"
+                            android:layout_height="30dp"
+                            android:layout_centerHorizontal="true"
+                            android:text="Follow"
+                            android:background="@drawable/unfollowbtn"
+                            android:layout_marginTop="10dp"/>
+
+                        <ProgressBar
+                            android:id="@+id/progress"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="25dp"
+                            />
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:weightSum="4">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.7"
+                            android:gravity="right">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_action_person"
+                                android:layout_marginRight="10dp"
+                                />
+                        </LinearLayout>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:id="@+id/tvUsername"
+                                android:text="Nayram"
+                                style="@style/Base.TextAppearance.AppCompat.Title"
+                                android:gravity="left"
+                                android:textSize="16dp"
+                                android:layout_marginTop="5dp"
+                                android:textColor="@color/mdtp_white"/>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:weightSum="4">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.7"
+                            android:gravity="right">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_action_email"
+                                android:layout_marginRight="10dp"
+                                />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textColor="@color/mdtp_white"
+                            android:id="@+id/tvEmail"
+                            android:gravity="left"
+                            android:text="nayrma@forhey.com"
+                            android:layout_marginTop="5dp"
+                            android:textSize="16dp"
+                            style="@style/Base.TextAppearance.AppCompat.Title"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:weightSum="4">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.7"
+                            android:gravity="right">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_action_phone"
+                                android:layout_marginRight="10dp"
+                                />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textColor="@color/mdtp_white"
+                            android:gravity="left"
+                            android:text="+233277073834"
+                            android:textSize="16dp"
+                            android:layout_marginTop="5dp"
+                            style="@style/Base.TextAppearance.AppCompat.Title"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/map"
+            android:id="@+id/profileImg"
+            android:layout_gravity="center_horizontal"
+            app:civ_border_color="@color/black"
+            app:civ_border_width="5dp"
+            android:elevation="5dp"/>
+
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

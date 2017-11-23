@@ -45,10 +45,12 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidsdk.devless.io.devless.interfaces.LogoutResponse;
 import androidsdk.devless.io.devless.interfaces.SignUpResponse;
 import androidsdk.devless.io.devless.main.Devless;
 import androidsdk.devless.io.devless.messages.ErrorMessage;
 import androidsdk.devless.io.devless.messages.Payload;
+import androidsdk.devless.io.devless.messages.ResponsePayload;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -181,9 +183,11 @@ public class MainActivity extends AppCompatActivity
             //GeneralFunctions.addFragmentFromRight(fm,new Profile_Fragment(),R.id.main_content);
 
         } else if (id == R.id.nav_logout) {
-            GeneralFunctions.logout(this);
-            startActivity(new Intent(this,HomeActivity.class));
+            GeneralFunctions.logout(MainActivity.this);
+            startActivity(new Intent(MainActivity.this,HomeActivity.class));
             finish();
+
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

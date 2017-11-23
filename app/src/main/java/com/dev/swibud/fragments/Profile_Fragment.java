@@ -249,10 +249,10 @@ public class Profile_Fragment extends Fragment{
     }
 
     void save() throws JSONException {
-        List<String> params=new ArrayList<>(Arrays.asList(
+        /*List<String> params=new ArrayList<>(Arrays.asList(
                 edtEmail.getText().toString(),userJson.getString("phone_number"),edtUserName.getText().toString(),edtPhone.getText().toString(),edtFirstName.getText().toString(),
                 edtLastName.getText().toString()
-        ));
+        ));*/
         showProgress();
         //App.devless.updateProfile();
 
@@ -267,7 +267,7 @@ public class Profile_Fragment extends Fragment{
 
                         try {
                             JSONObject jsonObject=new JSONObject(responsePayload.toString());
-                            JSONObject user= jsonObject.getJSONObject(Constants.Payload).getJSONObject(Constants.Result);
+                            JSONObject user= jsonObject.getJSONObject(Constants.Payload).getJSONObject(Constants.PayloadResult);
                             if (user.getBoolean("status")){
 
                                 GeneralFunctions.saveUser(user.toString(),getActivity());

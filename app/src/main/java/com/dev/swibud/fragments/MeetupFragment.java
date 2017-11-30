@@ -1,5 +1,6 @@
 package com.dev.swibud.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,7 +36,7 @@ import butterknife.OnClick;
  * Created by nayrammensah on 9/4/17.
  */
 
-public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
     @BindView(R.id.createMeetup)
     FloatingActionButton createMeetup;
@@ -48,7 +49,8 @@ public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @BindView(R.id.progress_bar_profile)
     ProgressBar progress_bar;
     @OnClick(R.id.createMeetup) void newMeetup(){
-        getActivity().startActivityForResult(new Intent(getActivity(), CreateMeetupActivity.class),120);
+        startActivityForResult(new Intent(getActivity(), CreateMeetupActivity.class),120);
+
     }
     String TAG=getClass().getName();
     MeetupAdapter adapter;
@@ -72,7 +74,10 @@ public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRef
         App.devless.getData("MeetupService", "dummyTable", new GetDataResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
+                Log.d(TAG,response.toString());
                 progress_bar.setVisibility(View.GONE);
+                Log.d(TAG,response.toString());
+                swipeRefreshLayout.setRefreshing(false);
                 try {
                     JSONObject object=new JSONObject(response.toString());
                     if (object.getInt("status_code")==1001){
@@ -81,6 +86,7 @@ public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     }
 
                 } catch (JSONException e) {
+
                     e.printStackTrace();
                 }
 
@@ -90,6 +96,7 @@ public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRef
             public void onFailed(ErrorMessage errorMessage) {
                 Log.d(TAG,errorMessage.toString());
                 progress_bar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -97,6 +104,7 @@ public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRef
             public void userNotAuthenticated(ErrorMessage message) {
                 Log.d(TAG,message.toString());
                 progress_bar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
 
             }
         });
@@ -105,5 +113,27 @@ public class MeetupFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onRefresh() {
         loadMeetups();
+    }
+
+    @Override
+    public String getTagText() {
+        return null;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        Log.d(TAG,requestCode+"");
+        if (requestCode == 120 ){
+            swipeRefreshLayout.setRefreshing(true);
+//            progress_bar.setVisibility(View.VISIBLE);
+            loadMeetups();
+        }
+
     }
 }

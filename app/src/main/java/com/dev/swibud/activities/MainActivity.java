@@ -28,12 +28,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dev.swibud.R;
+import com.dev.swibud.fragments.BaseFragment;
 import com.dev.swibud.fragments.FragmentDisplayFriendLocations;
 import com.dev.swibud.fragments.FriendsListFragment;
 import com.dev.swibud.fragments.MeetupFragment;
 import com.dev.swibud.fragments.ProfileFragment;
 import com.dev.swibud.fragments.Profile_Fragment;
 import com.dev.swibud.interfaces.AuthInterface;
+import com.dev.swibud.interfaces.BackHandlerInterface;
 import com.dev.swibud.interfaces.MainServiceInterface;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
@@ -57,7 +59,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainServiceInterface,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,BackHandlerInterface {
 
     @BindView(R.id.main_content)
     ConstraintLayout main_content;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     public GoogleApiClient googleApiClient;
     FragmentDisplayFriendLocations fragmentDisplayFriendLocations;
     android.support.v4.app.FragmentManager fm;
+    private BaseFragment selectedFragment;
 
 
     @Override
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         fragmentDisplayFriendLocations=new FragmentDisplayFriendLocations();
         fragmentDisplayFriendLocations.googleApiClient=googleApiClient;
         fragmentDisplayFriendLocations.getDeviceLocation();
-        fragmentDisplayFriendLocations.updateLocationUI();
+//        fragmentDisplayFriendLocations.updateLocationUI();
         setFragmentContent(fragmentDisplayFriendLocations, Constants.DISPLAY_FRIENDS_ON_MAP);
         //fm.beginTransaction().replace(R.id.main_content, fragmentDisplayFriendLocations).commit();
 
@@ -126,7 +129,8 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(selectedFragment == null || !selectedFragment.onBackPressed()) {
+            // Selected fragment did not consume the back press event.
             super.onBackPressed();
         }
     }
@@ -163,7 +167,9 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             setTitle("SwiBud");
 
+
             setFragmentContent(fragmentDisplayFriendLocations,Constants.DISPLAY_FRIENDS_ON_MAP);
+
 //            setFragmentContent(fragmentDisplayFriendLocations,Constants.DISPLAY_FRIENDS_ON_MAP);
             //setFragmentContent(frag,Constants.DISPLAY_FRIENDS_ON_MAP);
            // GeneralFunctions.addFragmentFromRight(fm,frag,R.id.main_content);
@@ -272,5 +278,10 @@ public class MainActivity extends AppCompatActivity
         android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.main_content, fragment,fragTag);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void setSelectedFragment(BaseFragment backHandledFragment) {
+        this.selectedFragment = backHandledFragment;
     }
 }

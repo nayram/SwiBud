@@ -6,11 +6,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.location.Location;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -34,12 +37,18 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import com.bumptech.glide.Glide;
 import com.dev.swibud.R;
+import com.dev.swibud.activities.OpenChatActivity;
+import com.dev.swibud.adapters.ContactAdapter;
 import com.dev.swibud.interfaces.MainServiceInterface;
 import com.dev.swibud.pojo.ExtraUserProfile;
+import com.dev.swibud.pojo.Users;
+import com.dev.swibud.pojo.UsersList;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
 import com.dev.swibud.utils.GeneralFunctions;
+import com.dev.swibud.utils.PersonRenderer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -60,33 +69,43 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidsdk.devless.io.devless.interfaces.EditDataResponse;
+import androidsdk.devless.io.devless.interfaces.GetDataResponse;
 import androidsdk.devless.io.devless.interfaces.PostDataResponse;
 import androidsdk.devless.io.devless.interfaces.SearchResponse;
 import androidsdk.devless.io.devless.messages.ErrorMessage;
 import androidsdk.devless.io.devless.messages.ResponsePayload;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by nayrammensah on 8/6/17.
  */
 
-public class FragmentDisplayFriendLocations extends Fragment implements OnMapReadyCallback,
+public class FragmentDisplayFriendLocations extends BaseFragment implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,OnRequestPermissionsResultCallback,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,LocationListener{
+        GoogleApiClient.OnConnectionFailedListener,LocationListener,ClusterManager.OnClusterClickListener<Users>,
+        ClusterManager.OnClusterInfoWindowClickListener<Users>, ClusterManager.OnClusterItemClickListener<Users>,
+        ClusterManager.OnClusterItemInfoWindowClickListener<Users>{
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     MaterialDialog dialog;
@@ -94,7 +113,8 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     GoogleMap mMap;
     String TAG=getClass().getName();
     Location mLastKnownLocation;
-    float DEFAULT_ZOOM= 14;
+    float DEFAULT_ZOOM= 10;
+    boolean updateState=false;
 
     String serviceName="UserExraDetails";
 
@@ -109,6 +129,10 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     public GoogleApiClient googleApiClient;
     private final static int REQUEST_CHECK_SETTINGS_GPS=0x1;
     private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
+
+    private ClusterManager<Users> mClusterManager;
+
+    UsersList usersArrayList;
 
     @BindView(R.id.mapProgress)
     ProgressBar mapProgress;
@@ -140,69 +164,27 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     public void onMapReady(GoogleMap map) {
 
         mMap=map;
-        /*LatLng minc = new LatLng(5.644429, -0.1537547);
-        View marker = LayoutInflater.from(getActivity()).inflate(R.layout.custom_marker_pin, null);
-        TextView numTxt = (TextView) marker.findViewById(R.id.tvName);
-        numTxt.setText("Nayram");
-
-
-        mMap.addMarker(new MarkerOptions()
-                .position(minc)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker))));
-
-
-
-        LatLng anc=new LatLng(5.64159,-0.1545487);
-        View marker1=LayoutInflater.from(getActivity()).inflate(R.layout.custom_marker_pin,null);
-        TextView numTxt1=(TextView)marker1.findViewById(R.id.tvName);
-        numTxt1.setText("Tsatsu");
-        mMap.addMarker(new MarkerOptions()
-                .position(anc)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker1))));
-
-        LatLng lizzySports=new LatLng(5.6425082,-0.1541946);
-        View marker2=LayoutInflater.from(getActivity()).inflate(R.layout.custom_marker_pin,null);
-        TextView numTxt2=(TextView)marker2.findViewById(R.id.tvName);
-        numTxt2.setText("Julius");
-        mMap.addMarker(new MarkerOptions()
-                .position(lizzySports)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker2))));
-
-
-
-        marker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog("Nayram Swibud");
-            }
-        });
-        marker1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog("Tsatsu Swibud");
-            }
-        });
-
-        marker2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog("Julius Swibud");
-            }
-        });*/
 
 
         mMap.setOnMarkerClickListener(this);
 
-        /*LatLng maxInternational=new LatLng(5.64159,-0.1545487);
-        View marker3=LayoutInflater.from(getActivity()).inflate(R.layout.custom_marker_pin,null);
-        TextView numTxt3=(TextView)marker3.findViewById(R.id.tvName);
-        numTxt3.setText("Edward");
-        map.addMarker(new MarkerOptions()
-                .position(maxInternational)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker3))));*/
 
         getDeviceLocation();
-        updateLocationUI();
+       updateLocationUI();
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 9.5f));
+
+        /*mClusterManager = new ClusterManager<Users>(getActivity(), mMap);
+        mClusterManager.setRenderer(new PersonRenderer(getContext(),map,mClusterManager));*/
+        /*mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setOnInfoWindowClickListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterInfoWindowClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);*/
+
+        addItems();
+
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(minc, 16));
 
        /* map.addMarker(new MarkerOptions()
@@ -210,6 +192,71 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
                 .snippet("The most populous city in Australia.")
                 .position(sydney));*/
 
+    }
+
+    private void addItems() {
+        mapProgress.setVisibility(View.VISIBLE);
+        App.devless.getData("users", "devlessUser", new GetDataResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                mapProgress.setVisibility(View.GONE);
+                Log.d(TAG,response.toString());
+                try {
+                    //Log.d("LogUtils",response.toString());
+                    JSONObject resp=new JSONObject(response.toString());
+                    //Log.d(TAG,resp.toString());
+                    usersArrayList=new Gson().fromJson(response.toString(),UsersList.class);
+                    Log.d(TAG,usersArrayList.toString());
+
+                    for (Users users : usersArrayList.payload){
+                        if (users.userDetails.size()>0)
+                            if (users.getId() != GeneralFunctions.getUserId(getContext()))
+                            if (users.getPosition() !=null){
+
+                                View marker = LayoutInflater.from(getActivity()).inflate(R.layout.custom_marker_pin, null);
+                                TextView numTxt = (TextView) marker.findViewById(R.id.tvPerson);
+                                ImageView img=(ImageView)marker.findViewById(R.id.imgPerson);
+                                numTxt.setText(users.getTitle());
+                                Glide.with(getActivity())
+                                        .load(users.userDetails.get(0).getUser_image())
+                                        .into(img);
+//                                Toast.makeText(ctx, "user has location", Toast.LENGTH_SHORT).show();
+                                MarkerOptions mo= new MarkerOptions()
+                                        .position(users.getPosition())
+                                        .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker)));
+
+                                mMap.addMarker(mo).setTag(users);
+
+
+                            }
+                        if (mLastKnownLocation !=null)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(mLastKnownLocation.getLatitude(),
+                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        
+                    }
+                    
+//                   mClusterManager.cluster();
+                    // getFollowers(resp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+//                    Toast.makeText(getContext(), "Failed to load Contacts", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailed(ErrorMessage errorMessage) {
+                mapProgress.setVisibility(View.GONE);
+                Log.d(TAG,errorMessage.toString());
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage message) {
+                mapProgress.setVisibility(View.GONE);
+                Log.d(TAG,message.toString());
+            }
+        });
     }
 
     public Bitmap createDrawableFromView(Context context, View view) {
@@ -227,20 +274,29 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
         return bitmap;
     }
 
-    public void showDialog(String name){
-        Log.d("Friends",name);
+    public void showDialog(final Users users){
+//        Log.d("Friends",name);
         boolean wrapInScrollView = true;
 
         View user_view=LayoutInflater.from(getActivity()).inflate(R.layout.dialog_user,null);
         TextView textView1=(TextView)user_view.findViewById(R.id.tvDialogUserName);
-        textView1.setText(name);
+        CircleImageView img=(CircleImageView) user_view.findViewById(R.id.tvDialogUserProfile);
+        textView1.setText(users.getTitle());
         Button btnChat=(Button)user_view.findViewById(R.id.btnDialogUser);
+        Glide.with(getActivity())
+                .load(users.userDetails.get(0).getUser_image())
+                .into(img);
         dialog=new MaterialDialog.Builder(getActivity())
                 .customView(user_view, wrapInScrollView).show();
 
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putString("name",users.getTitle());
+                Intent intent=new Intent(getActivity(),OpenChatActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 dialog.dismiss();
             }
         });
@@ -272,6 +328,8 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                if (mMap.getMyLocation()!=null)
+                checkUserIdAvailability();
             } else {
                 //Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
                 mMap.setMyLocationEnabled(false);
@@ -296,31 +354,7 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
                         getMyLocation();
                     }
                 }
-               /* Task locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        Log.d(TAG,new Gson().toJson(task));
 
-                        if (task.isSuccessful()) {
-                            //Toast.makeText(getActivity(), "Task Successful", Toast.LENGTH_SHORT).show();
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = (Location) task.getResult();
-                            if(mLastKnownLocation!=null)
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            else authCallback.setLocationSnackBar("Turn on GPS location!");
-
-                        } else {
-                           // Toast.makeText(getActivity(), "Current Location is null", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s", task.getException());
-                            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });*/
             }
         } catch(SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
@@ -328,26 +362,30 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     }
 
     void getMyLocation(){
+        mapProgress.setVisibility(View.VISIBLE);
         int permissionLocation = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionLocation == PackageManager.PERMISSION_GRANTED){
             mLastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             LocationRequest locationRequest = new LocationRequest();
-            locationRequest.setInterval(3000);
-            locationRequest.setFastestInterval(3000);
+            locationRequest.setInterval(3600);
+            locationRequest.setFastestInterval(3600);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                     .addLocationRequest(locationRequest);
             builder.setAlwaysShow(true);
+
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(googleApiClient, locationRequest, this);
             PendingResult result =
                     LocationServices.SettingsApi
                             .checkLocationSettings(googleApiClient, builder.build());
+
             result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
 
                 @Override
                 public void onResult(LocationSettingsResult result) {
+
                     final Status status = result.getStatus();
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
@@ -359,19 +397,24 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
                             if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
                                 mLastKnownLocation = LocationServices.FusedLocationApi
                                         .getLastLocation(googleApiClient);
-                                if (mLastKnownLocation!=null){
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                            new LatLng(mLastKnownLocation.getLatitude(),
-                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                                    GeneralFunctions.setLatitude(getContext(), (float) mLastKnownLocation.getLatitude());
-                                    GeneralFunctions.setLongitude(getContext(), (float) mLastKnownLocation.getLongitude());
+                                //Log.d(TAG,mLastKnownLocation.toString());
+                                if (mMap.getMyLocation()!=null){
+                                   mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(mMap.getMyLocation().getLatitude(),
+                                                    mMap.getMyLocation().getLongitude()), DEFAULT_ZOOM));
+                                    GeneralFunctions.setLatitude(getContext(), (float) mMap.getMyLocation().getLatitude());
+                                    GeneralFunctions.setLongitude(getContext(), (float) mMap.getMyLocation().getLongitude());
                                     checkUserIdAvailability();
                                     //setUserLocation(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLatitude());
+                                }else {
+                                    mapProgress.setVisibility(View.VISIBLE);
+                                    Toast.makeText(getActivity(), "Not getting last known location", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            mapProgress.setVisibility(View.GONE);
                             // Location settings are not satisfied.
                             // But could be fixed by showing the user a dialog.
                             try {
@@ -404,6 +447,16 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
 
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG +": ACTIVITY RESULT "+resultCode,data.toString());
+        if (requestCode == REQUEST_CHECK_SETTINGS_GPS && resultCode == Activity.RESULT_OK){
+            getMyLocation();
+        }
+    }
+
     private synchronized void setUpGClient() {
         if (googleApiClient==null){
             googleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -418,19 +471,11 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public boolean onMarkerClick(Marker marker) {;
 
-        switch (marker.getId()){
-            case "m0":
-                showDialog("Nayram");
-                break;
-            case "m1":
-                showDialog("Tsatsu");
-                break;
-            case "m2":
-                showDialog("Julius");
-                break;
-        }
+        Users users= (Users) marker.getTag();
+        showDialog(users);
+
         return false;
     }
 
@@ -488,16 +533,6 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
 
     }
 
-   /* @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (googleApiClient != null && googleApiClient.isConnected()) {
-            googleApiClient.stopAutoManage(getActivity());
-            googleApiClient.disconnect();
-            Log.d(TAG, "On Destroy");
-        }
-    }*/
-
     @Override
     public void onPause() {
         super.onPause();
@@ -510,15 +545,6 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
         }
     }
 
-   /* @Override
-    public void onStop() {
-        super.onStop();
-        if (googleApiClient != null && googleApiClient.isConnected()) {
-            googleApiClient.stopAutoManage(getActivity());
-            googleApiClient.disconnect();
-        }
-    }*/
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -526,10 +552,13 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location!=null)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(location.getLatitude(),
-                        location.getLongitude()), DEFAULT_ZOOM));
+        if (location!=null) {
+            /*mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(location.getLatitude(),
+                            location.getLongitude()), DEFAULT_ZOOM));*/
+            mapProgress.setVisibility(View.VISIBLE);
+            updateLocationUI();
+        }
 
     }
 
@@ -586,13 +615,16 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
     }
 
     void checkUserIdAvailability(){
+
+//        Toast.makeText(ctx, "Check UserId Availability", Toast.LENGTH_SHORT).show();
         Map<String, Object> params = new HashMap<>();
         params.put("where","users_id,"+GeneralFunctions.getUserId(getActivity()));
-        App.devless.search(serviceName, "user_extra_details", params, new SearchResponse() {
+        App.devless.search("UserExraDetails", "user_extra_details", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
                // hideProgress();
-                Log.d(TAG,response.toString());
+//                 Toast.makeText(ctx, "Search Success", Toast.LENGTH_SHORT).show();
+                Log.d(TAG+": "+serviceName,response.toString());
                 try {
                     JSONObject jsonObject=new JSONObject(response.toString());
                     String userobjParam=GeneralFunctions.getUserExtraDetail(getActivity());
@@ -605,14 +637,18 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
                         }
                     }
                     if (jsonObject.getJSONObject("payload").getJSONArray("results").length()>0){
-
-                        updateService();
+//                        Toast.makeText(ctx, "Update Location Success", Toast.LENGTH_SHORT).show();
+                        JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
+                        updateService(profile);
                     }else{
+//                        Toast.makeText(ctx, "Save Location Success", Toast.LENGTH_SHORT).show();
                         saveToService();
                     }
 
                 } catch (JSONException e) {
                     //hideProgress();
+//                    isHidden();
+                    mapProgress.setVisibility(View.VISIBLE);
                     e.printStackTrace();
                 }
             }
@@ -635,49 +671,114 @@ public class FragmentDisplayFriendLocations extends Fragment implements OnMapRea
             @Override
             public void onSuccess(ResponsePayload response) {
                 //hideProgress();
-
+                mapProgress.setVisibility(View.GONE);
                 Log.d(TAG,response.toString());
             }
 
             @Override
             public void onFailed(ErrorMessage errorMessage) {
                 //hideProgress();
+                mapProgress.setVisibility(View.GONE);
                 Log.d(TAG,errorMessage.toString());
             }
 
             @Override
             public void userNotAuthenticated(ErrorMessage message) {
                 //hideProgress();
+                mapProgress.setVisibility(View.GONE);
                 Log.d(TAG,message.toString());
             }
         });
     }
 
-    void updateService(){
+    void updateService(JSONObject proile){
         Map<String, Object> params = new HashMap<>();
-        // params.put("users_id",GeneralFunctions.getUserId(getContext()));
+         params.put("users_id",GeneralFunctions.getUserId(getContext()));
         params.put("user_image",GeneralFunctions.getUserImage(getContext()));
-        params.put("longitude",mLastKnownLocation.getLongitude());
-        params.put("latitude",mLastKnownLocation.getLatitude());
-        params.put("where","id,"+GeneralFunctions.getUserId(getContext()));
-        App.devless.edit(serviceName, "user_extra_details", params, GeneralFunctions.getUser(getContext()), new EditDataResponse() {
-            @Override
-            public void onSuccess(ResponsePayload response) {
+        params.put("longitude",mMap.getMyLocation().getLongitude());
+        params.put("latitude",mMap.getMyLocation().getLatitude());
+        try {
+            int id=proile.getInt("id");
+            App.devless.edit(serviceName, "user_extra_details", params,String.valueOf(id), new EditDataResponse() {
+                @Override
+                public void onSuccess(ResponsePayload response) {
+                    mapProgress.setVisibility(View.GONE);
+//                    Toast.makeText(ctx, "Update location details", Toast.LENGTH_SHORT).show();
 
-                Log.d(TAG,response.toString());
-            }
+                    Log.d(TAG,response.toString());
+                }
 
-            @Override
-            public void onFailed(ErrorMessage errorMessage) {
-                //hideProgress();
-                Log.d(TAG,errorMessage.toString());
-            }
+                @Override
+                public void onFailed(ErrorMessage errorMessage) {
+                    //hideProgress();
+                    mapProgress.setVisibility(View.GONE);
+                    Log.d(TAG,errorMessage.toString());
+                }
 
-            @Override
-            public void userNotAuthenticated(ErrorMessage message) {
-                //hideProgress();
-                Log.d(TAG,message.toString());
-            }
-        });
+                @Override
+                public void userNotAuthenticated(ErrorMessage message) {
+                    //hideProgress();
+                    mapProgress.setVisibility(View.GONE);
+                    Log.d(TAG,message.toString());
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public String getTagText() {
+        return null;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+
+    @Override
+    public boolean onClusterClick(Cluster<Users> cluster) {
+        // Show a toast with some info when the cluster is clicked.
+        String firstName = cluster.getItems().iterator().next().first_name;
+       // Toast.makeText(getContext(), cluster.getSize() + " (including " + firstName + ")", Toast.LENGTH_SHORT).show();
+
+        // Zoom in the cluster. Need to create LatLngBounds and including all the cluster items
+        // inside of bounds, then animate to center of the bounds.
+
+        // Create the builder to collect all essential cluster items for the bounds.
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        for (ClusterItem item : cluster.getItems()) {
+            builder.include(item.getPosition());
+        }
+        // Get the LatLngBounds
+        final LatLngBounds bounds = builder.build();
+
+        // Animate camera to the bounds
+        try {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
+
+    }
+
+    @Override
+    public void onClusterInfoWindowClick(Cluster<Users> cluster) {
+
+    }
+
+    @Override
+    public boolean onClusterItemClick(Users item) {
+        return false;
+    }
+
+    @Override
+    public void onClusterItemInfoWindowClick(Users item) {
+
     }
 }

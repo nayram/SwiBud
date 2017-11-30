@@ -223,7 +223,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                             Log.w("PhoneVERifier", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 pDialog.dismiss();
-                                Toast.makeText(getActivity(), "Verification code is invalid", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Verification code is invalid! Request for a new code", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -244,6 +244,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                 edtPhone.getText().toString(), App.sp, new LoginResponse() {
             @Override
             public void onLogInSuccess(ResponsePayload payload) {
+                Log.d(TAG,payload.toString());
 
                 try {
                     JSONObject jsob=new JSONObject(payload.toString());

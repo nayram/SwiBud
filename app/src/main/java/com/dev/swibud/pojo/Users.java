@@ -1,15 +1,28 @@
 package com.dev.swibud.pojo;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 /**
  * Created by nayrammensah on 8/18/17.
  */
 
-public class Users {
+public class Users implements ClusterItem{
     public String first_name,email,username,last_name,phone_number,image;
     public boolean status;
     public int id;
+    public ArrayList<UserDetails> userDetails;
+    //followers,following;
+
+
+
 
     public Users() {
     }
@@ -118,6 +131,31 @@ public class Users {
         result.append("}");
 
         return result.toString();
+    }
+
+    @Override
+    public LatLng getPosition() {
+        if (userDetails !=null && userDetails.size()>0){
+
+            double lat=userDetails.get(0).getLatitude();
+            double lng=userDetails.get(0).getLongitude();
+            LatLng latLng=new LatLng(lat,lng);
+            return  latLng;
+
+
+        }
+        return null;
+    }
+
+    @Override
+    public String getTitle() {
+
+        return first_name +" "+last_name;
+    }
+
+    @Override
+    public String getSnippet() {
+        return "";
     }
 
     public class Profile {

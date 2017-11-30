@@ -550,7 +550,16 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
 
                 Log.d(TAG,response.toString());
                 pgCreateMeetup.setVisibility(View.GONE);
-                setResult(RESULT_OK);
+                try {
+                    JSONObject res=new JSONObject(response.toString());
+                    if (res.getJSONObject(Constants.Payload).has(Constants.EntryId)){
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 
             }
 
@@ -558,6 +567,7 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
             public void onFailed(ErrorMessage errorMessage) {
                 Log.d(TAG,errorMessage.toString());
                 pgCreateMeetup.setVisibility(View.GONE);
+
             }
 
             @Override

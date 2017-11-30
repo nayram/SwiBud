@@ -55,7 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by nayrammensah on 9/3/17.
  */
 
-public class FriendsListFragment extends Fragment {
+public class FriendsListFragment extends BaseFragment {
 
     @BindView(R.id.recView)
     RecyclerView recView;
@@ -342,4 +342,19 @@ public class FriendsListFragment extends Fragment {
         });
     }
 
+    @Override
+    public String getTagText() {
+        return null;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mBottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED){
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 }

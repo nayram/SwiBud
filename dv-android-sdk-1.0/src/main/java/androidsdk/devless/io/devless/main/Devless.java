@@ -487,6 +487,8 @@ public class Devless extends AppCompatActivity implements Serializable{
         POSTAPI postapi = retrofit.create(POSTAPI.class);
         Call<ResponseBody> result = postapi.sendPosts("rpc?action="+ actionName,
                 token,devlessUserToken, DevlessBuilder.callBodyBuilder(serviceName, params));
+        Log.d(TAG,"token "+token);
+        Log.d(TAG,"devlessToken "+devlessUserToken);
 
         result.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -840,6 +842,8 @@ public class Devless extends AppCompatActivity implements Serializable{
 
 
 
+
+
     private List<String> loopJson (JSONObject jsonObject){
         List<String> ele = new ArrayList<>();
         int i = 0;
@@ -878,9 +882,10 @@ public class Devless extends AppCompatActivity implements Serializable{
             String phoneNumber,
             String firstname,
             String lastname,
-            String others,
+            String others,SharedPreferences sharedPreferences,
             final RequestResponse requestResponse)
     {
+       devlessUserToken= sharedPreferences.getString("devlessUserToken","");
         List<String> updateDetails = new ArrayList<>(Arrays.asList(
                 email, password, username, phoneNumber, firstname, lastname, others
         ));

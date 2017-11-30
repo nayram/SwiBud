@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:background="@color/white">
+        android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgUser"
@@ -30,6 +29,7 @@
             android:id="@+id/tvInvName"
             android:layout_below="@+id/imgUser"
             android:layout_marginTop="10dp"
+            android:textColor="@color/black"
             android:gravity="center_horizontal"/>
 
         <CheckBox

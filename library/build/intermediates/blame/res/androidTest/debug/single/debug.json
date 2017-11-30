@@ -1,0 +1,494 @@
+[
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/layout_amu_info_window.xml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/layout/amu_info_window.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_ic_googleplayservices.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_ground_overlay_color.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_ground_overlay_color.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_full_open_on_phone.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_full_open_on_phone.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_nested_folders.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_nested_folders.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_unsupported.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_unsupported.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_basic_folder.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_basic_folder.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4_common_ic_googleplayservices.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-ldpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_inline_style.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_inline_style.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_ic_googleplayservices.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_amu_bubble_mask.9.png.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/drawable-xxhdpi-v4/amu_bubble_mask.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_ic_googleplayservices.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_default_balloon.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_default_balloon.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable_common_google_signin_btn_icon_light.xml.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable/common_google_signin_btn_icon_light.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_multiple_placemarks.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_multiple_placemarks.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_multigeometry_placemarks.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_multigeometry_placemarks.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_ground_overlay.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_ground_overlay.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/layout_amu_text_bubble.xml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/layout/amu_text_bubble.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_amu_bubble_shadow.9.png.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/amu_bubble_shadow.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_poly_style_boolean_alpha.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_poly_style_boolean_alpha.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_cdata.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_cdata.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_full_open_on_phone.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_full_open_on_phone.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable_common_google_signin_btn_text_dark.xml.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable/common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_nested_multigeometry.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_nested_multigeometry.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_visibility_ground_overlay.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_visibility_ground_overlay.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable_common_google_signin_btn_text_light.xml.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable/common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable_common_google_signin_btn_icon_dark.xml.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable/common_google_signin_btn_icon_dark.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_amu_bubble_mask.9.png.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/amu_bubble_mask.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_full_open_on_phone.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_full_open_on_phone.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/layout_amu_webview.xml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/layout/amu_webview.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_unknwown_folder.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_unknwown_folder.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_dark_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_dark_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_text_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_text_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_text_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_text_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_light_pressed.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_pressed.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/color_common_google_signin_btn_text_dark.xml.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/color/common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_google_signin_btn_icon_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_google_signin_btn_icon_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_text_dark_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_text_dark_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_text_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_text_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_light_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4_common_full_open_on_phone.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-mdpi-v4/common_full_open_on_phone.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_document_nest.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_document_nest.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_ballon_gx_prefix.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_ballon_gx_prefix.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-tvdpi-v4_common_google_signin_btn_icon_dark_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-tvdpi-v4/common_google_signin_btn_icon_dark_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_extended_data.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_extended_data.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xhdpi-v4/common_google_signin_btn_icon_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_google_signin_btn_icon_light_focused.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_google_signin_btn_icon_light_focused.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_poly_style_boolean_numeric.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_poly_style_boolean_numeric.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_amu_bubble_shadow.9.png.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/drawable-xxhdpi-v4/amu_bubble_shadow.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/color_common_google_signin_btn_text_light.xml.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/color/common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_normal.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_google_signin_btn_icon_light_disabled.9.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_disabled.9.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_basic_placemark.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_basic_placemark.kml"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4_common_full_open_on_phone.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-hdpi-v4/common_full_open_on_phone.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4_common_ic_googleplayservices.png.flat",
+        "source": "/Users/nayrammensah/.gradle/caches/transforms-1/files-1.1/play-services-base-9.6.1.aar/89543e67f68e04e3f00b3fd6d228e30d/res/drawable-xxhdpi-v4/common_ic_googleplayservices.png"
+    },
+    {
+        "merged": "/Users/nayrammensah/Swibud/library/build/intermediates/res/merged/androidTest/debug/raw_amu_draw_order_ground_overlay.kml.flat",
+        "source": "/Users/nayrammensah/Swibud/library/build/intermediates/bundles/debug/res/raw/amu_draw_order_ground_overlay.kml"
+    }
+]

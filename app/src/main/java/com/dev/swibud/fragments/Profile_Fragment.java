@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ import gun0912.tedbottompicker.TedBottomPicker;
  * Created by nayrammensah on 9/3/17.
  */
 
-public class Profile_Fragment extends Fragment{
+public class Profile_Fragment extends BaseFragment{
 
     @BindView(R.id.edtFirstName)
     EditText edtFirstName;
@@ -255,10 +256,11 @@ public class Profile_Fragment extends Fragment{
         ));*/
         showProgress();
         //App.devless.updateProfile();
+//        SharedPreferences sharedPreferences=getContext().getSharedPreferences()getSharedPreferences
 
         App.devless.updateProfile(edtEmail.getText().toString(),userJson.getString("phone_number"),
                 edtUserName.getText().toString(),edtPhone.getText().toString(),edtFirstName.getText().toString(),
-                edtLastName.getText().toString(),"",new RequestResponse(){
+                edtLastName.getText().toString(),"",App.sp,new RequestResponse(){
 
                     @Override
                     public void onSuccess(ResponsePayload responsePayload) {
@@ -493,5 +495,15 @@ public class Profile_Fragment extends Fragment{
     public static boolean isEmailValid(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
         return matcher.find();
+    }
+
+    @Override
+    public String getTagText() {
+        return null;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 }

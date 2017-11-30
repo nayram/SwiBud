@@ -19,7 +19,7 @@ public class App extends Application {
 
     public static Devless devless;
     public static SharedPreferences sp;
-    public
+
     @Override
     public void onCreate() {
         super.onCreate();

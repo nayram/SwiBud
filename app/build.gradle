@@ -55,6 +55,8 @@ dependencies {
     compile 'co.chatsdk.chatsdk:chat-sdk-ui:4.0.5'
     compile 'co.chatsdk.chatsdk:chat-sdk-firebase-adapter:4.0.5'
     compile 'co.chatsdk.chatsdk:chat-sdk-firebase-file-storage:4.0.5'
+    compile 'co.chatsdk.chatsdk:chat-sdk-firebase-push:4.0.5'
+    compile 'com.android.support:multidex:1.0.1'
     /*compile 'io.reactivex:rxandroid:1.2.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
@@ -65,3 +67,4 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'realm-android'

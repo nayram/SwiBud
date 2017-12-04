@@ -10,6 +10,7 @@ import com.dev.swibud.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 /**
  * Created by nayrammensah on 11/27/17.
@@ -19,7 +20,8 @@ public class OpenChatActivity extends AppCompatActivity {
 
     @BindView(R.id.tool_bar)
     Toolbar toolbar;
-
+    Realm realm;
+    public static int receipient_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,11 +38,15 @@ public class OpenChatActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-
         Bundle extra= getIntent().getExtras();
-       if (extra!=null){
-           setTitle(extra.getString("name",""));
-       }
+        if (extra!=null){
+            setTitle(extra.getString("name",""));
+        }
+        realm = Realm.getDefaultInstance();
+
+    }
+
+    void saveChat(){
+
     }
 }

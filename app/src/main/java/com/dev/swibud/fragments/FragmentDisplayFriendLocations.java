@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -39,6 +40,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.bumptech.glide.Glide;
 import com.dev.swibud.R;
+import com.dev.swibud.activities.MainActivity;
 import com.dev.swibud.activities.OpenChatActivity;
 import com.dev.swibud.adapters.ContactAdapter;
 import com.dev.swibud.interfaces.MainServiceInterface;
@@ -74,10 +76,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,6 +92,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidsdk.devless.io.devless.interfaces.EditDataResponse;
@@ -113,10 +121,11 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
     GoogleMap mMap;
     String TAG=getClass().getName();
     Location mLastKnownLocation;
-    float DEFAULT_ZOOM= 10;
+    float DEFAULT_ZOOM= 17;
     boolean updateState=false;
 
     String serviceName="UserExraDetails";
+    ProgressDialog pDialog;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -145,7 +154,10 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.fragment_map,container,false);
         ButterKnife.bind(this,rootView);
-
+        pDialog=new ProgressDialog(getActivity());
+        pDialog.setIndeterminate(true);
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Loading...");
 
         return rootView;
     }
@@ -164,6 +176,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
     public void onMapReady(GoogleMap map) {
 
         mMap=map;
+//        mMap.setMaxZoomPreference(15);
 
 
         mMap.setOnMarkerClickListener(this);
@@ -202,15 +215,15 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
                 mapProgress.setVisibility(View.GONE);
                 Log.d(TAG,response.toString());
                 try {
-                    //Log.d("LogUtils",response.toString());
+                    Log.d("LogUtils",response.toString());
                     JSONObject resp=new JSONObject(response.toString());
-                    //Log.d(TAG,resp.toString());
+                    Log.d(TAG,resp.toString());
                     usersArrayList=new Gson().fromJson(response.toString(),UsersList.class);
                     Log.d(TAG,usersArrayList.toString());
 
                     for (Users users : usersArrayList.payload){
                         if (users.userDetails.size()>0)
-                            if (users.getId() != GeneralFunctions.getUserId(getContext()))
+                            if (users.getId() != GeneralFunctions.getUserId())
                             if (users.getPosition() !=null){
 
                                 View marker = LayoutInflater.from(getActivity()).inflate(R.layout.custom_marker_pin, null);
@@ -233,6 +246,9 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        else {
+                            mMap.moveCamera(CameraUpdateFactory.zoomIn());
+                        }
                         
                     }
                     
@@ -286,21 +302,80 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         Glide.with(getActivity())
                 .load(users.userDetails.get(0).getUser_image())
                 .into(img);
+
         dialog=new MaterialDialog.Builder(getActivity())
                 .customView(user_view, wrapInScrollView).show();
 
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle=new Bundle();
-                bundle.putString("name",users.getTitle());
-                Intent intent=new Intent(getActivity(),OpenChatActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+
+                String userString=GeneralFunctions.getUser(getActivity());
+                Log.d(TAG,userString);
+                try {
+                    final JSONObject object=new JSONObject(userString);
+//                    mSelected.add(object.getString("username"));
+
+                    String access=GeneralFunctions.getSendBirdAccessToken(getActivity());
+
+
+                    pDialog.show();
+                    SendBird.connect(object.getString("username"),access, new SendBird.ConnectHandler() {
+                        @Override
+                        public void onConnected(User user, SendBirdException e) {
+                            if (e != null) {
+                                pDialog.dismiss();
+                                e.printStackTrace();
+                                // Error.
+                                Toast.makeText(getContext(), "Failed to establish connection", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            registerFcm(users,user.getUserId());
+
+
+                        }
+                    });
+
+                    /*String access=GeneralFunctions.getSendBirdAccessToken(getActivity());
+
+                    Log.d(TAG,access);*/
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                
                 dialog.dismiss();
             }
         });
 
+    }
+
+
+    void registerFcm(final Users users ,final String userId){
+        if (FirebaseInstanceId.getInstance().getToken() == null){
+
+            pDialog.dismiss();
+            Toast.makeText(getContext(), "Failed to establish connection", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SendBird.registerPushTokenForCurrentUser(FirebaseInstanceId.getInstance().getToken(),
+                new SendBird.RegisterPushTokenWithStatusHandler() {
+                    @Override
+                    public void onRegistered(SendBird.PushTokenRegistrationStatus status, SendBirdException e) {
+                        if (e != null) {
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            // Error.
+                            Toast.makeText(getContext(), "Failed to establish connection", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        List<String> mSelected=new ArrayList<>();
+                        mSelected.add(users.username);
+                        mSelected.add(userId);
+                        createGroupChannel(mSelected,users.getTitle(),true);
+                    }
+                });
     }
 
     @Override
@@ -328,7 +403,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                if (mMap.getMyLocation()!=null)
+                if (mLastKnownLocation!=null)
                 checkUserIdAvailability();
             } else {
                 //Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
@@ -398,15 +473,16 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
                                 mLastKnownLocation = LocationServices.FusedLocationApi
                                         .getLastLocation(googleApiClient);
                                 //Log.d(TAG,mLastKnownLocation.toString());
-                                if (mMap.getMyLocation()!=null){
+                                if (mLastKnownLocation !=null){
                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                            new LatLng(mMap.getMyLocation().getLatitude(),
-                                                    mMap.getMyLocation().getLongitude()), DEFAULT_ZOOM));
-                                    GeneralFunctions.setLatitude(getContext(), (float) mMap.getMyLocation().getLatitude());
-                                    GeneralFunctions.setLongitude(getContext(), (float) mMap.getMyLocation().getLongitude());
+                                            new LatLng(mLastKnownLocation.getLatitude(),
+                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                    GeneralFunctions.setLatitude(getContext(), (float) mLastKnownLocation.getLatitude());
+                                    GeneralFunctions.setLongitude(getContext(), (float) mLastKnownLocation.getLongitude());
                                     checkUserIdAvailability();
                                     //setUserLocation(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLatitude());
                                 }else {
+                                    mMap.moveCamera(CameraUpdateFactory.zoomIn());
                                     mapProgress.setVisibility(View.VISIBLE);
                                     Toast.makeText(getActivity(), "Not getting last known location", Toast.LENGTH_SHORT).show();
                                 }
@@ -587,7 +663,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
     }
 
     void setUserLocation(double latitude,double longitude){
-        int id=GeneralFunctions.getUserId(getContext());
+        int id=GeneralFunctions.getUserId();
         Map<String, Object> dataToPost = new HashMap<>();
         dataToPost.put("lat",latitude);
         dataToPost.put("lng",longitude);
@@ -618,7 +694,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
 
 //        Toast.makeText(ctx, "Check UserId Availability", Toast.LENGTH_SHORT).show();
         Map<String, Object> params = new HashMap<>();
-        params.put("where","users_id,"+GeneralFunctions.getUserId(getActivity()));
+        params.put("where","users_id,"+GeneralFunctions.getUserId());
         App.devless.search("UserExraDetails", "user_extra_details", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
@@ -636,7 +712,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
                             GeneralFunctions.setUserExtraDetail(getContext(),new Gson().toJson(eup));
                         }
                     }
-                    if (jsonObject.getJSONObject("payload").getJSONArray("results").length()>0){
+                    if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0){
 //                        Toast.makeText(ctx, "Update Location Success", Toast.LENGTH_SHORT).show();
                         JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
                         updateService(profile);
@@ -662,7 +738,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
 
     void saveToService(){
         Map<String, Object> params = new HashMap<>();
-        params.put("users_id",String.valueOf(GeneralFunctions.getUserId(getContext())));
+        params.put("users_id",String.valueOf(GeneralFunctions.getUserId()));
         params.put("user_image",GeneralFunctions.getUserImage(getContext()));
         params.put("longitude",mLastKnownLocation.getLongitude());
         params.put("latitude",mLastKnownLocation.getLatitude());
@@ -693,10 +769,10 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
 
     void updateService(JSONObject proile){
         Map<String, Object> params = new HashMap<>();
-         params.put("users_id",GeneralFunctions.getUserId(getContext()));
+         params.put("users_id",GeneralFunctions.getUserId());
         params.put("user_image",GeneralFunctions.getUserImage(getContext()));
-        params.put("longitude",mMap.getMyLocation().getLongitude());
-        params.put("latitude",mMap.getMyLocation().getLatitude());
+        params.put("longitude",mLastKnownLocation.getLongitude());
+        params.put("latitude",mLastKnownLocation.getLatitude());
         try {
             int id=proile.getInt("id");
             App.devless.edit(serviceName, "user_extra_details", params,String.valueOf(id), new EditDataResponse() {
@@ -727,6 +803,32 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         }
 
 
+    }
+
+    private void createGroupChannel(List<String> userIds, final String name, boolean distinct) {
+
+        GroupChannel.createChannelWithUserIds(userIds, distinct, new GroupChannel.GroupChannelCreateHandler() {
+            @Override
+            public void onResult(GroupChannel groupChannel, SendBirdException e) {
+                pDialog.dismiss();
+                if (e != null) {
+                    // Error!
+                    e.printStackTrace();
+                    Toast.makeText(ctx, "Failed to launch chat window. Try again!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.d(TAG,groupChannel.toString());
+
+                Intent intent = new Intent(getContext(),OpenChatActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString(Constants.EXTRA_NEW_CHANNEL_URL,groupChannel.getUrl());
+                bundle.putString("name",name);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                
+
+            }
+        });
     }
 
     @Override

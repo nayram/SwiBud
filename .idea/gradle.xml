@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/dv-android-sdk-1.0" />
             <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/tedbottompicker" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

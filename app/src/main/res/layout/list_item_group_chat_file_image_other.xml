@@ -26,7 +26,7 @@
 
     <ImageView
         android:id="@+id/image_group_chat_profile"
-        android:src="@drawable/ic_profile"
+        android:src="@drawable/ic_person"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/text_group_chat_date"
         android:layout_alignWithParentIfMissing="true"

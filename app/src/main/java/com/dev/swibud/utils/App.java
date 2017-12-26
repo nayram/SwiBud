@@ -8,17 +8,21 @@ import android.support.multidex.MultiDexApplication;
 
 import com.cloudinary.android.MediaManager;
 import com.dev.swibud.R;
+import com.sendbird.android.SendBird;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidsdk.devless.io.devless.main.Devless;
-import co.chatsdk.core.session.ChatSDK;
-import co.chatsdk.core.session.Configuration;
-import co.chatsdk.firebase.FirebaseModule;
-import co.chatsdk.firebase.file_storage.FirebaseFileStorageModule;
-import co.chatsdk.ui.manager.UserInterfaceModule;
 import io.realm.Realm;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by nayrammensah on 8/15/17.
@@ -28,6 +32,7 @@ public class App extends MultiDexApplication {
 
     public static Devless devless;
     public static SharedPreferences sp;
+    public static SwibudServices swibudServices;
 //    public static Configuration.Builder builder;
     @Override
     public void onCreate() {
@@ -39,6 +44,32 @@ public class App extends MultiDexApplication {
         config.put("cloud_name", "swibud");
         MediaManager.init(this, config);
         Realm.init(this);
+        SendBird.init("96E3CA61-7EB5-4463-90AB-8399D6C12524", context);
+
+        OkHttpClient httpClient = new OkHttpClient();
+
+        try{
+            httpClient.networkInterceptors().add(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request request = chain.request().newBuilder().addHeader("Api-Token", "0f237906255518390807fc71bdc921de6283b84b").build();
+                    return chain.proceed(request);
+                }
+            });
+
+        }catch (UnsupportedOperationException ex){
+            ex.printStackTrace();
+        }
+
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(SwibudServices.domain)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+
+        swibudServices=retrofit.create(SwibudServices.class);
 /*
         Configuration.Builder builder = new Configuration.Builder(context);
         builder.firebaseRootPath("prod");

@@ -23,6 +23,7 @@ import com.dev.swibud.activities.HomeActivity;
 import com.dev.swibud.activities.MainActivity;
 import com.dev.swibud.interfaces.AuthInterface;
 import com.dev.swibud.pojo.ExtraUserProfile;
+import com.dev.swibud.pojo.User;
 import com.dev.swibud.pojo.Users;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
@@ -38,6 +39,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.gson.Gson;
 import com.hbb20.CountryCodePicker;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +61,9 @@ import androidsdk.devless.io.devless.messages.ResponsePayload;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by nayrammensah on 8/4/17.
@@ -169,6 +174,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                 tvCaption.setText("Enter verification code");
                 llVerification.setVisibility(View.VISIBLE);
                 edtVerification.setText(credential.getSmsCode());
+                pDialog.show();
                 signInWithPhoneAuthCredential(credential);
             }
 
@@ -200,7 +206,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                 tvCaption.setText("Enter verification Code");
                 llVerification.setVisibility(View.VISIBLE);
                 llPhoneNumber.setVisibility(View.GONE);
-                pDialog.dismiss();
+
             }
         };
 
@@ -220,6 +226,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                             Log.d("PhoneVERifier", "signInWithCredential:success");
                             signUpUser();
                         } else {
+                            pDialog.dismiss();
                             Log.w("PhoneVERifier", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 pDialog.dismiss();
@@ -245,6 +252,7 @@ public class PhoneNumberAuthFragment extends Fragment {
             @Override
             public void onLogInSuccess(ResponsePayload payload) {
                 Log.d(TAG,payload.toString());
+
 
                 try {
                     JSONObject jsob=new JSONObject(payload.toString());
@@ -276,7 +284,7 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     void getUserData(){
         Map<String, Object> params = new HashMap<>();
-        params.put("where","users_id,"+GeneralFunctions.getUserId(getContext()));
+        params.put("where","users_id,"+GeneralFunctions.getUserId());
         App.devless.search("UserExraDetails", "user_extra_details", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
@@ -346,6 +354,9 @@ public class PhoneNumberAuthFragment extends Fragment {
         basket.putBoolean("Auth",true);
         GeneralFunctions.addFragmentFromRight(getActivity().getSupportFragmentManager(),profileFragment,R.id.llHomeContainer);
     }
+
+
+
 
     @Override
     public void onAttach(Context context) {

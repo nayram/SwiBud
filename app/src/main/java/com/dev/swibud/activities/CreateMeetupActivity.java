@@ -482,7 +482,7 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
         params.put("time",edtTime.getText().toString());
         params.put("date",edtDate.getText().toString());
         params.put("name",edtTitle.getText().toString());
-        params.put("users_id", GeneralFunctions.getUserId(this));
+        params.put("users_id", GeneralFunctions.getUserId());
         params.put("timestamp",String.valueOf(selectedCalendar.getTime()));
         params.put("location",autLocation.getText().toString());
         params.put("description",edtDetails.getText().toString());

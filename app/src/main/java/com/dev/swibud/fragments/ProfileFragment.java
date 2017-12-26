@@ -1,6 +1,8 @@
 package com.dev.swibud.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -95,6 +100,8 @@ public class ProfileFragment extends Fragment {
     JSONObject userJson;
 
     private String serviceName="UserExraDetails";
+
+    private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
 
     @OnClick(R.id.btnSaveProfile) void saveProfile(){
         validateInputs();
@@ -189,93 +196,22 @@ public class ProfileFragment extends Fragment {
     }
 
     void launchImagePicker(){
-        TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(getActivity())
-                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
-                    @Override
-                    public void onImageSelected(final Uri uri) {
-                        // here is selected uri
-                        showImgLoading();
-                        String requestId = MediaManager.get()
-                                .upload(uri).unsigned("tderom9l")
-                                .callback(new ListenerService() {
-                                    @Nullable
-                                    @Override
-                                    public IBinder onBind(Intent intent) {
-                                        return null;
-                                    }
 
-                                    @Override
-                                    public void onStart(String requestId) {
+        int permissionWriteEXTERNAL= ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                                    }
+        if (permissionWriteEXTERNAL == PackageManager.PERMISSION_GRANTED){
+            openPicker();
+        }else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
 
-                                    @Override
-                                    public void onProgress(String requestId, long bytes, long totalBytes) {
-                                        Log.d(TAG,String.valueOf((bytes/totalBytes)*100));
-
-                                    }
-
-                                    @Override
-                                    public void onSuccess(String requestId, Map resultData) {
-                                        //hideProgress();
-                                        Log.d(TAG,resultData.toString());
-                                        Toast.makeText(getActivity(), resultData.get("url").toString(), Toast.LENGTH_LONG).show();
-                                        Glide.with(getActivity())
-                                                .load(uri)
-                                                .into(profile_image);
-
-                                        Log.d(TAG,uri.toString());
-                                        GeneralFunctions.saveUserImage(uri.toString(),getActivity());
-
-                                        checkUserIdAvailability(resultData.get("url").toString());
-
-                                    }
-
-                                    @Override
-                                    public void onError(String requestId, ErrorInfo error) {
-                                        hideImgLoading();
-                                        Toast.makeText(getActivity(), error.getDescription(), Toast.LENGTH_LONG).show();
-
-                                    }
-
-                                    @Override
-                                    public void onReschedule(String requestId, ErrorInfo error) {
-                                        Log.d(TAG,error.toString());
-
-                                    }
-                                }).dispatch();
-                        /*Log.d(TAG,uri.toString());
-                        GeneralFunctions.saveUserImage(uri.toString(),getActivity());*/
-                      /*  try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
-                            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                                @Override
-                                public void onGenerated(Palette palette) {
-                                    List<Palette.Swatch> swatches = palette.getSwatches();
-
-                                    // collapsingToolbar.setContentScrimColor(swatches.get(1).getRgb());
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        Log.e(TAG,"Above lollipop ");
-                                        imgView.setBackgroundColor(swatches.get(2).getRgb());
-                                       // if (getArguments() !=null){
-                                            toolbar.setBackgroundColor(swatches.get(2).getRgb());
-                                       // }
-                                        // collapsingToolbar.setStatusBarScrimColor(swatches.get(3).getRgb());
-                                    }
-
-
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
-
-                    }
-                })
-                .create();
-
-        tedBottomPicker.show(getActivity().getSupportFragmentManager());
     }
+
+
+
 
     void launchMainActivity() throws JSONException {
 
@@ -377,7 +313,7 @@ public class ProfileFragment extends Fragment {
 
     void checkUserIdAvailability(final String imgUrl){
         Map<String, Object> params = new HashMap<>();
-        params.put("where","users_id,"+GeneralFunctions.getUserId(getActivity()));
+        params.put("where","users_id,"+GeneralFunctions.getUserId());
         App.devless.search(serviceName, "user_extra_details", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
@@ -414,7 +350,7 @@ public class ProfileFragment extends Fragment {
 
     void saveToService(final String imgUrl){
         Map<String, Object> params = new HashMap<>();
-        params.put("users_id",String.valueOf(GeneralFunctions.getUserId(getContext())));
+        params.put("users_id",String.valueOf(GeneralFunctions.getUserId()));
         params.put("user_image",imgUrl);
         params.put("longitude",GeneralFunctions.getLongitude(getContext()));
         params.put("latitude",GeneralFunctions.getLatitude(getContext()));
@@ -455,13 +391,92 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    void openPicker(){
+        TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(getActivity())
+                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                    @Override
+                    public void onImageSelected(final Uri uri) {
+                        // here is selected uri
+                        showImgLoading();
+                        String requestId = MediaManager.get()
+                                .upload(uri).unsigned("tderom9l")
+                                .callback(new ListenerService() {
+                                    @Nullable
+                                    @Override
+                                    public IBinder onBind(Intent intent) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public void onStart(String requestId) {
+
+                                    }
+
+                                    @Override
+                                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                                        Log.d(TAG,String.valueOf((bytes/totalBytes)*100));
+
+                                    }
+
+                                    @Override
+                                    public void onSuccess(String requestId, Map resultData) {
+                                        //hideProgress();
+                                        Log.d(TAG,resultData.toString());
+                                        Toast.makeText(getActivity(), resultData.get("url").toString(), Toast.LENGTH_LONG).show();
+                                        Glide.with(getActivity())
+                                                .load(uri)
+                                                .into(profile_image);
+
+                                        Log.d(TAG,uri.toString());
+                                        GeneralFunctions.saveUserImage(uri.toString(),getActivity());
+
+                                        checkUserIdAvailability(resultData.get("url").toString());
+
+                                    }
+
+                                    @Override
+                                    public void onError(String requestId, ErrorInfo error) {
+                                        hideImgLoading();
+                                        Toast.makeText(getActivity(), error.getDescription(), Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                    @Override
+                                    public void onReschedule(String requestId, ErrorInfo error) {
+                                        Log.d(TAG,error.toString());
+
+                                    }
+                                }).dispatch();
+
+                    }
+                })
+                .create();
+
+        tedBottomPicker.show(getActivity().getSupportFragmentManager());
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openPicker();
+                }
+            }
+
+        }
+    }
+
     void updateService(final String imgUrl){
         Map<String, Object> params = new HashMap<>();
-        // params.put("users_id",GeneralFunctions.getUserId(getContext()));
+        // params.put("users_id",GeneralFunctions.getUserId());
         params.put("user_image",imgUrl);
         params.put("longitude",GeneralFunctions.getLongitude(getContext()));
         params.put("latitude",GeneralFunctions.getLatitude(getContext()));
-        params.put("where","id,"+GeneralFunctions.getUserId(getContext()));
+        params.put("where","id,"+GeneralFunctions.getUserId());
         App.devless.edit(serviceName, "user_extra_details", params, GeneralFunctions.getUser(getContext()), new EditDataResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {

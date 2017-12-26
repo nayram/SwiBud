@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.dev.swibud"
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -19,6 +19,11 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
+    google()
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -29,21 +34,21 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.0.4'
     compile 'com.google.firebase:firebase-auth:11.0.4'
     compile 'com.hbb20:ccp:2.0.2'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:design:26.0.2'
     compile 'com.jakewharton:butterknife:8.7.0'
-    compile 'com.android.support:support-core-utils:25.4.0'
+    compile 'com.android.support:support-core-utils:26.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'gun0912.ted:tedbottompicker:1.0.12'
+//    compile 'gun0912.ted:tedbottompicker:1.0.12'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
-    compile 'com.android.support:palette-v7:25.3.1'
+    compile 'com.android.support:palette-v7:26.0.2'
     compile 'com.google.code.gson:gson:2.8.0'
-    //compile 'com.github.bumptech.glide:glide:4.0.0'
-    //annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
     compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'com.google.android.gms:play-services-places:11.0.4'
     compile project(':dv-android-sdk-1.0')
@@ -51,12 +56,15 @@ dependencies {
     compile 'com.ramotion.foldingcell:folding-cell:1.2.1'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
     compile project(path: ':library')
-    compile 'co.chatsdk.chatsdk:chat-sdk-core:4.0.5'
-    compile 'co.chatsdk.chatsdk:chat-sdk-ui:4.0.5'
-    compile 'co.chatsdk.chatsdk:chat-sdk-firebase-adapter:4.0.5'
-    compile 'co.chatsdk.chatsdk:chat-sdk-firebase-file-storage:4.0.5'
-    compile 'co.chatsdk.chatsdk:chat-sdk-firebase-push:4.0.5'
     compile 'com.android.support:multidex:1.0.1'
+    compile 'org.jsoup:jsoup:1.10.2'
+    compile 'com.dinuscxj:circleprogressbar:1.1.1'
+    compile 'com.github.stfalcon:multiimageview:0.1'
+    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.43'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.google.firebase:firebase-messaging:11.0.4'
+
+//    compile 'com.squareup.okhttp:okhttp:2.7.5'
     /*compile 'io.reactivex:rxandroid:1.2.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
@@ -64,6 +72,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
 
     compile 'io.reactivex:rxjava:1.3.0'*/
+    compile project(path: ':tedbottompicker')
 }
 
 apply plugin: 'com.google.gms.google-services'

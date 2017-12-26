@@ -83,9 +83,9 @@ public class FollowersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     //JSONArray followers=userObj.getJSONArray("following");
                     Log.d(TAG,"Followers length "+followers.length());
                     for (int i=0;i<followers.length(); i++){
-                        Log.d(TAG,"Follower Id: "+followers.getJSONObject(i).getInt("follower_id")+" - UserObj "+GeneralFunctions.getUserId(ctx));
+                        Log.d(TAG,"Follower Id: "+followers.getJSONObject(i).getInt("follower_id")+" - UserObj "+GeneralFunctions.getUserId());
                         Log.d(TAG,"User Id: "+followers.getJSONObject(i).getInt("user_id")+" - "+userObj.getInt("id"));
-                        if (followers.getJSONObject(i).getInt("follower_id")==GeneralFunctions.getUserId(ctx) &&
+                        if (followers.getJSONObject(i).getInt("follower_id")==GeneralFunctions.getUserId() &&
                                 followers.getJSONObject(i).getInt("user_id")==userObj.getInt("id")){
                             followerObj=followers.getJSONObject(i);
                             isFollowing=true;
@@ -104,7 +104,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             dataToChange.put("follower_id", GeneralFunctions.getUser(ctx));
                             try {
                                 dataToChange.put("user_id",userObj.getInt("id"));
-                                dataToChange.put("follower_id",GeneralFunctions.getUserId(ctx));
+                                dataToChange.put("follower_id",GeneralFunctions.getUserId());
                                 dataToChange.put("accepted",0);
                                 ((FollowViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                                 ((FollowViewHolder) holder).btnFollow.setVisibility(View.GONE);

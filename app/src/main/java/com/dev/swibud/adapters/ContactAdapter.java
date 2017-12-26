@@ -67,6 +67,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final boolean[] isFollowing = {false};
             JSONObject followObj=null;
             try {
+
                 final JSONObject userObj=jsonArray.getJSONObject(position);
                 if (userObj !=null){
                     if (!userObj.getString("first_name").equals("null"))
@@ -85,8 +86,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if (followers !=null){
                         Log.d(TAG,"Followers "+followers.length());
                         for (int i=0;i<followers.length(); i++){
-                            Log.d(TAG,followers.getJSONObject(i).getInt("follower_id")+" - " +GeneralFunctions.getUserId(ctx));
-                            if (followers.getJSONObject(i).getInt("follower_id")==GeneralFunctions.getUserId(ctx) ){
+                            Log.d(TAG,followers.getJSONObject(i).getInt("follower_id")+" - " +GeneralFunctions.getUserId());
+                            if (followers.getJSONObject(i).getInt("follower_id")==GeneralFunctions.getUserId() ){
                                 Log.d(TAG,"IS FOLLOWER");
                                 followObj=followers.getJSONObject(i);
                                 isFollowing[0] =true;

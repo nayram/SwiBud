@@ -1,18 +1,23 @@
 package com.dev.swibud.fragments;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -108,6 +113,8 @@ public class Profile_Fragment extends BaseFragment{
 
     String TAG=getClass().getName();
 
+    private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
+
     JSONObject userJson;
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -183,6 +190,21 @@ public class Profile_Fragment extends BaseFragment{
     }
 
     void launchImagePicker(){
+        int permissionWriteEXTERNAL= ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permissionWriteEXTERNAL == PackageManager.PERMISSION_GRANTED){
+           openPicker();
+        }else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+
+    }
+
+
+    void openPicker(){
         TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(getActivity())
                 .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
                     @Override
@@ -219,7 +241,7 @@ public class Profile_Fragment extends BaseFragment{
                                                 .into(profile_image);
 
                                         Log.d(TAG,uri.toString());
-                                        GeneralFunctions.saveUserImage(uri.toString(),getActivity());
+                                        GeneralFunctions.saveUserImage(resultData.get("url").toString(),getActivity());
                                         authCallback.updateProfileImage();
                                         checkUserIdAvailability(resultData.get("url").toString());
 
@@ -239,14 +261,27 @@ public class Profile_Fragment extends BaseFragment{
 
                                     }
                                 }).dispatch();
-                       // showProgress();
+                        // showProgress();
 
 
                     }
                 })
                 .create();
-
         tedBottomPicker.show(getActivity().getSupportFragmentManager());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openPicker();
+                }
+            }
+
+        }
     }
 
     void save() throws JSONException {
@@ -309,7 +344,7 @@ public class Profile_Fragment extends BaseFragment{
 
     void checkUserIdAvailability(final String imgUrl){
         Map<String, Object> params = new HashMap<>();
-        params.put("where","users_id,"+GeneralFunctions.getUserId(getActivity()));
+        params.put("where","users_id,"+GeneralFunctions.getUserId());
         App.devless.search(serviceName, "user_extra_details", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
@@ -348,7 +383,7 @@ public class Profile_Fragment extends BaseFragment{
 
     void saveToService(final String imgUrl){
         Map<String, Object> params = new HashMap<>();
-        params.put("users_id",String.valueOf(GeneralFunctions.getUserId(getContext())));
+        params.put("users_id",String.valueOf(GeneralFunctions.getUserId()));
         params.put("user_image",imgUrl);
         params.put("longitude",GeneralFunctions.getLongitude(getContext()));
         params.put("latitude",GeneralFunctions.getLatitude(getContext()));
@@ -363,7 +398,8 @@ public class Profile_Fragment extends BaseFragment{
                         if (jsonObject.getJSONObject(Constants.Payload).has(Constants.EntryId)){
                             ExtraUserProfile eup=new ExtraUserProfile(GeneralFunctions.getLatitude(getContext()),GeneralFunctions.getLatitude(getContext())
                                     ,imgUrl,jsonObject.getJSONObject(Constants.Payload).getInt(Constants.EntryId));
-                            GeneralFunctions.setUserExtraDetail(getContext(),new Gson().toJson(ExtraUserProfile.class));
+
+                            GeneralFunctions.setUserExtraDetail(getContext(),eup.toString());
                             Log.d(TAG,response.toString());
                         }
 
@@ -392,13 +428,13 @@ public class Profile_Fragment extends BaseFragment{
 
     void updateService(final String imgUrl){
         Map<String, Object> params = new HashMap<>();
-       // params.put("users_id",GeneralFunctions.getUserId(getContext()));
+       // params.put("users_id",GeneralFunctions.getUserId());
 
         final ExtraUserProfile euP=new Gson().fromJson(GeneralFunctions.getUserExtraDetail(getContext()),ExtraUserProfile.class);
         params.put("user_image",imgUrl);
         params.put("longitude",euP.getLongitude());
         params.put("latitude",euP.getLatitude());
-//        params.put("where","id,"+GeneralFunctions.getUserId(getContext()));
+//        params.put("where","id,"+GeneralFunctions.getUserId());
         App.devless.edit(serviceName, "user_extra_details", params, String.valueOf(euP.getId()), new EditDataResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {

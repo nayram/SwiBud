@@ -1,6 +1,7 @@
 package com.dev.swibud.activities;
 
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,6 +44,11 @@ import com.dev.swibud.utils.GeneralFunctions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +62,9 @@ import androidsdk.devless.io.devless.messages.ResponsePayload;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainServiceInterface,GoogleApiClient.ConnectionCallbacks,
@@ -76,6 +85,7 @@ public class MainActivity extends AppCompatActivity
     FragmentDisplayFriendLocations fragmentDisplayFriendLocations;
     android.support.v4.app.FragmentManager fm;
     private BaseFragment selectedFragment;
+    ProgressDialog pDialog;
 
 
     @Override
@@ -85,6 +95,7 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Log.d(TAG,"package name: "+getPackageName());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -101,6 +112,11 @@ public class MainActivity extends AppCompatActivity
         try {
             userObj=new JSONObject(user);
             headerName.setText(userObj.getString("first_name")+" "+userObj.getString("last_name"));
+            if (userObj.has("username")){
+                Constants.USER_ID=userObj.getString("username");
+            }else{
+                Constants.USERID=userObj.getString("first_name")+"_"+userObj.getString("last_name");
+            }
             if (GeneralFunctions.getUserImage(this)!=null){
 
                 String img=GeneralFunctions.getUserImage(this);
@@ -118,8 +134,58 @@ public class MainActivity extends AppCompatActivity
         fragmentDisplayFriendLocations=new FragmentDisplayFriendLocations();
         fragmentDisplayFriendLocations.googleApiClient=googleApiClient;
         fragmentDisplayFriendLocations.getDeviceLocation();
-//        fragmentDisplayFriendLocations.updateLocationUI();
+        fragmentDisplayFriendLocations.updateLocationUI();
+        pDialog=new ProgressDialog(this);
+        pDialog.setIndeterminate(true);
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Setting up user profile");
         setFragmentContent(fragmentDisplayFriendLocations, Constants.DISPLAY_FRIENDS_ON_MAP);
+
+        boolean isSendbirdConnect=GeneralFunctions.isSendBirdConnected(this);
+        Log.d(TAG,String.valueOf(isSendbirdConnect));
+        if (!isSendbirdConnect){
+            boolean isSendBirdLogin=GeneralFunctions.isSendBirdLogin(this);
+            String acc_token=GeneralFunctions.getSendBirdAccessToken(MainActivity.this);
+            if (isSendBirdLogin && acc_token !=null){
+                SendBird.connect(Constants.USER_ID,acc_token, new SendBird.ConnectHandler() {
+                    @Override
+                    public void onConnected(User user, SendBirdException e) {
+                        if (e != null) {
+                            e.printStackTrace();
+                            // Error.
+                            return;
+                        }
+                        GeneralFunctions.setSendBirdConnect(MainActivity.this,true);
+                        Log.d(TAG,user.toString());
+
+                    }
+                });
+            }else{
+                com.dev.swibud.pojo.User body= new com.dev.swibud.pojo.User();
+                body.user_id=Constants.USER_ID;
+                body.nickname=headerName.getText().toString();
+                body.issue_access_token=true;
+                String url=GeneralFunctions.getUserImage(this);
+                if (url !=null && !url.isEmpty() && !url.equals("null"))
+                body.profile_url=GeneralFunctions.getUserImage(this);
+
+                pDialog.show();
+                loginSendBirdUser(body);
+            }
+
+        }/*else{
+            com.dev.swibud.pojo.User body= new com.dev.swibud.pojo.User();
+            body.user_id=Constants.USER_ID;
+            body.nickname=headerName.getText().toString();
+            body.issue_access_token=true;
+            String url=GeneralFunctions.getUserImage(this);
+            if (url !=null && !url.isEmpty() && !url.equals("null"))
+                body.profile_url=GeneralFunctions.getUserImage(this);
+
+            pDialog.show();
+            loginSendBirdUser(body);
+
+        }*/
         //fm.beginTransaction().replace(R.id.main_content, fragmentDisplayFriendLocations).commit();
 
     }
@@ -283,5 +349,70 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void setSelectedFragment(BaseFragment backHandledFragment) {
         this.selectedFragment = backHandledFragment;
+    }
+
+    void signupSendBird(final com.dev.swibud.pojo.User user){
+        App.swibudServices.registerSendBirdUser(user).enqueue(new Callback<com.dev.swibud.pojo.User>() {
+            @Override
+            public void onResponse(Call<com.dev.swibud.pojo.User> call, Response<com.dev.swibud.pojo.User> response) {
+                Log.d(TAG,response.toString());
+                pDialog.dismiss();
+                Log.d(TAG, new Gson().toJson(response));
+                if (response.body()!=null && !response.body().access_token.isEmpty()){
+                    GeneralFunctions.setSendBirdAccessToken(MainActivity.this,response.body().access_token);
+                    GeneralFunctions.setSendBirdLogin(MainActivity.this,true);
+                    connectSendBirdUser(user.user_id,user.access_token);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<com.dev.swibud.pojo.User> call, Throwable t) {
+                pDialog.dismiss();
+                t.printStackTrace();
+
+            }
+        });
+    }
+
+    void loginSendBirdUser(final com.dev.swibud.pojo.User user){
+        App.swibudServices.getCurrentUser(user.user_id).enqueue(new Callback<com.dev.swibud.pojo.User>() {
+            @Override
+            public void onResponse(Call<com.dev.swibud.pojo.User> call, Response<com.dev.swibud.pojo.User> response) {
+                Log.d(TAG,new Gson().toJson(response));
+                if (response.body()!=null && response.body().access_token !=null && !response.body().access_token.isEmpty()){
+
+                    GeneralFunctions.setSendBirdLogin(MainActivity.this,true);
+                    GeneralFunctions.setSendBirdAccessToken(MainActivity.this,response.body().access_token);
+                    connectSendBirdUser(user.user_id,response.body().access_token);
+                    pDialog.dismiss();
+
+                }else{
+                    signupSendBird(user);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.dev.swibud.pojo.User> call, Throwable t) {
+                t.printStackTrace();
+                signupSendBird(user);
+            }
+        });
+    }
+
+    void connectSendBirdUser(String userId,String acc_token){
+        SendBird.connect(userId,acc_token, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    e.printStackTrace();
+                    // Error.
+                    return;
+                }
+                GeneralFunctions.setSendBirdConnect(MainActivity.this,true);
+                Log.d(TAG,user.toString());
+
+            }
+        });
     }
 }

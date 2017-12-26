@@ -13,7 +13,7 @@ public class Chat extends RealmObject {
 
     private int from_id;
     private int to_id;
-    private Calendar created_at, updated_at;
+    private long created_at, updated_at;
     private String message;
 
     private RealmList<Chat> allChats;
@@ -34,19 +34,19 @@ public class Chat extends RealmObject {
         this.to_id = to_id;
     }
 
-    public Calendar getCreated_at() {
+    public long getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Calendar created_at) {
+    public void setCreated_at(long created_at) {
         this.created_at = created_at;
     }
 
-    public Calendar getUpdated_at() {
+    public long getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(Calendar updated_at) {
+    public void setUpdated_at(long updated_at) {
         this.updated_at = updated_at;
     }
 

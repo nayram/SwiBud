@@ -28,3 +28,10 @@ library/build/intermediates/shaders/
 library/build/intermediates/tmp/
 library/build/tmp/
 dv-android-sdk-1.0/build
+/tedbottompicker
+.idea/kotlinc.xml
+library/build/generated/assets/
+library/build/generated/source/rs/
+library/build/intermediates/lint/
+library/build/intermediates/rs/
+tedbottompicker/

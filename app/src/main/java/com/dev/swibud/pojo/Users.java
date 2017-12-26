@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 
 public class Users implements ClusterItem{
+
     public String first_name,email,username,last_name,phone_number,image;
     public boolean status;
     public int id;

@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_open_chat_root"
+    android:id="@+id/layout_group_chat_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" >
@@ -71,7 +71,7 @@
         android:layout_below="@+id/tool_bar">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_open_channel_chat"
+            android:id="@+id/recycler_group_chat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

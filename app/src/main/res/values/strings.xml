@@ -21,6 +21,14 @@
     <string name="action_settings">Settings</string>
     <string name="string_bottom_sheet_behavior">android.support.design.widget.BottomSheetBehavior</string>
 
+    <string name="swibud_app_id">96E3CA61-7EB5-4463-90AB-8399D6C12524</string>
+
     <string name="firebase_server_key">AAAAgVWINuo:APA91bHJIz_34CoK3iivWN6ZUxsnMlmn1hz74604H571iSDiR-1FSbAnS4t9ZboDtTZRgooITTc51pe3GsO4iDHFPJtTNfC5IK_0p_o3ST-maKEgbiuicXy028b9TGOFOOidvGQNtpd1</string>
     <string name="hi_how_are_you_today">Hi, how are you today?</string>
+    <string name="message_sending">sending message</string>
+    <string name="message_failed">failed!</string>
+    <string name="resend_message">Resend</string>
+    <string name="delete_message">delete</string>
+    <string name="download">download</string>
+    <string name="cancel">cancel</string>
 </resources>

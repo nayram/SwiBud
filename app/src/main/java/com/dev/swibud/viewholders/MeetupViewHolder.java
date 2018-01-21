@@ -3,6 +3,7 @@ package com.dev.swibud.viewholders;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,9 +23,11 @@ public class MeetupViewHolder extends RecyclerView.ViewHolder {
     public MapView mMapView;
     public FoldingCell foldingCell;
     public LinearLayout llParticipants;
+    public ImageView img_more;
 
     public MeetupViewHolder(View itemView) {
         super(itemView);
+
         tvMeetup=(TextView)itemView.findViewById(R.id.tvMeetup);
         tvLocation=(TextView)itemView.findViewById(R.id.tvLocation);
         tvDate=(TextView)itemView.findViewById(R.id.tvDate);
@@ -32,6 +35,8 @@ public class MeetupViewHolder extends RecyclerView.ViewHolder {
         mMapView=(MapView)itemView.findViewById(R.id.list_item_map_view_mapview);
         foldingCell=(FoldingCell)itemView.findViewById(R.id.folding_cell);
         llParticipants=(LinearLayout)itemView.findViewById(R.id.llParticipants);
+        img_more=(ImageView)itemView.findViewById(R.id.img_more);
+
     }
 
     public void mapViewListItemViewOnCreate(Bundle savedInstanceState) {

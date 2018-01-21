@@ -235,10 +235,6 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                                             .into(circleImageView);
 
 
-                                }else{
-                                    /*Glide.with(CreateMeetupActivity.this)
-                                            .load(getResources().getDrawable(R.drawable.ic_action_user_white))
-                                    .into(circleImageView);*/
                                 }
                                 if (!entry.getValue().getString("first_name").equals("null"))
                                     tvProfName.setText(entry.getValue().getString("first_name") + " "+entry.getValue().getString("last_name"));

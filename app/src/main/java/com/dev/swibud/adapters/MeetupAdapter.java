@@ -1,8 +1,12 @@
 package com.dev.swibud.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dev.swibud.R;
+import com.dev.swibud.activities.ActivityEditMeetup;
+import com.dev.swibud.fragments.MeetupFragment;
 import com.dev.swibud.viewholders.MeetupViewHolder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,9 +37,11 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     Context context;
     JSONArray jsonArray;
+    MeetupFragment mFragment;
 
-    public MeetupAdapter(Context context, JSONArray jsonArray) {
-        this.context = context;
+    public MeetupAdapter(MeetupFragment mFragment, JSONArray jsonArray) {
+        this.mFragment=mFragment;
+        this.context = mFragment.getContext();
         this.jsonArray = jsonArray;
     }
 
@@ -75,9 +83,11 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 meetupViewHolder.tvMeetup.setText(jsonObject.getString("name"));
                 meetupViewHolder.tvLocation.setText(jsonObject.getString("location"));
                 meetupViewHolder.tvDate.setText(jsonObject.getString("date")+" "+jsonObject.getString("time"));
+
                 if (jsonObject.get("description") !=null && !jsonObject.getString("description").equalsIgnoreCase("null"))
                 meetupViewHolder.tvDesc.setText(jsonObject.getString("description"));
                 meetupViewHolder.llParticipants.removeAllViews();
+
                 for (int i=0;i<jsonObject.getJSONArray("participants").length();i++){
                     JSONObject participant=jsonObject.getJSONArray("participants").getJSONObject(i);
                     View childLayout=LayoutInflater.from(meetupViewHolder.llParticipants.getContext())
@@ -100,12 +110,38 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     meetupViewHolder.llParticipants.addView(childLayout);
                 }
 
+                meetupViewHolder.img_more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PopupMenu popupMenu=new PopupMenu(meetupViewHolder.img_more.getContext(),meetupViewHolder.img_more);
+                        MenuInflater inflater = popupMenu.getMenuInflater();
+                        inflater.inflate(R.menu.meetup_options, popupMenu.getMenu());
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()){
+                                    case R.id.mn_edit:
+                                        ActivityEditMeetup.jobj=jsonObject;
+                                        Intent intent=new Intent(context,ActivityEditMeetup.class);
+
+                                        mFragment.startActivityForResult(intent,300);
+                                        break;
+                                }
+                                return false;
+                            }
+                        });
+                        popupMenu.show();
+                    }
+                });
+
                 meetupViewHolder.foldingCell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         meetupViewHolder.foldingCell.toggle(false);
                     }
                 });
+
                // meetupViewHolder.tvDesc.setText();
             } catch (JSONException e) {
                 e.printStackTrace();

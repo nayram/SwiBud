@@ -81,7 +81,7 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
                 try {
                     JSONObject object=new JSONObject(response.toString());
                     if (object.getInt("status_code")==1001){
-                        adapter=new MeetupAdapter(getContext(),object.getJSONArray(Constants.Payload));
+                        adapter=new MeetupAdapter(MeetupFragment.this,object.getJSONArray(Constants.Payload));
                         recView.setAdapter(adapter);
                     }
 
@@ -135,5 +135,14 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
             loadMeetups();
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==120){
+            swipeRefreshLayout.setRefreshing(true);
+            loadMeetups();
+        }
     }
 }

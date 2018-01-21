@@ -19,6 +19,7 @@ public  class Constants {
     public static final String SENDBIRD_LOGIN = "send_bird_login";
     public static final String SENDBIRD_ACCESS_TOKEN = "send_bird_access_token";
     public static final String EXTRA_NEW_CHANNEL_URL = "group_channel";
+    public static final String MEETUPTBL = "meetup";
     public static String EXTRA_GROUP_CHANNEL_URL="";
     public static final String PACKAGE_NAME="com.dev.swibud";
     static public String AppUrl="http://swibud.herokuapp.com/";
@@ -37,4 +38,6 @@ public  class Constants {
     public static String DISPLAY_FRIENDS_ON_MAP="display_friends_on_map";
     public static String FOLLOWING ="following";
     public static String USER_ID;
+    public static String MeetUpService="meetups";
+
 }

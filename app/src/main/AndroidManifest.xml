@@ -47,6 +47,7 @@
             android:theme="@style/AppTheme"></activity>
         <activity android:name=".activities.CreateMeetupActivity"/>
         <activity android:name=".activities.OpenChatActivity"/>
+        <activity android:name=".activities.ActivityEditMeetup"/>
 
         <service
             android:name=".utils.FirebaseMessageService">

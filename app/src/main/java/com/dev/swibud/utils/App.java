@@ -7,9 +7,11 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.cloudinary.android.MediaManager;
+import com.crashlytics.android.Crashlytics;
 import com.dev.swibud.R;
 import com.sendbird.android.SendBird;
 
+import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,10 +35,12 @@ public class App extends MultiDexApplication {
     public static Devless devless;
     public static SharedPreferences sp;
     public static SwibudServices swibudServices;
+
 //    public static Configuration.Builder builder;
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         Context context=getApplicationContext();
         sp= getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         devless = new Devless(this, Constants.AppUrl, Constants.token);

@@ -48,6 +48,8 @@
         <activity android:name=".activities.CreateMeetupActivity"/>
         <activity android:name=".activities.OpenChatActivity"/>
         <activity android:name=".activities.ActivityEditMeetup"/>
+        <activity android:name=".activities.ActivityGuests"/>
+        <activity android:name=".activities.AllUsers"/>
 
         <service
             android:name=".utils.FirebaseMessageService">
@@ -62,6 +64,9 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="efebe29321106f4be524076b443f0d791a2987cf" />
     </application>
 
 </manifest>

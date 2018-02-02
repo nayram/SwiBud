@@ -2,8 +2,10 @@ package com.dev.swibud.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dev.swibud.R;
 import com.dev.swibud.activities.ActivityEditMeetup;
+import com.dev.swibud.activities.ActivityGuests;
 import com.dev.swibud.fragments.MeetupFragment;
 import com.dev.swibud.viewholders.MeetupViewHolder;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,6 +41,7 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     Context context;
     JSONArray jsonArray;
     MeetupFragment mFragment;
+    String TAG=getClass().getName();
 
     public MeetupAdapter(MeetupFragment mFragment, JSONArray jsonArray) {
         this.mFragment=mFragment;
@@ -54,7 +58,7 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MeetupViewHolder){
             try {
                 final JSONObject jsonObject=jsonArray.getJSONObject(position);
@@ -110,6 +114,26 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     meetupViewHolder.llParticipants.addView(childLayout);
                 }
 
+                meetupViewHolder.llParticipants.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            ActivityGuests.jsonArray=jsonObject.getJSONArray("participants");
+
+                            Intent intent=new Intent(((MeetupViewHolder) holder).llParticipants.getContext(),ActivityGuests.class);
+
+                            Bundle bundle=new Bundle();
+                            bundle.putInt("meetup_id",jsonObject.getInt("id"));
+
+                            intent.putExtras(bundle);
+
+                            mFragment.startActivityForResult(intent,120);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
                 meetupViewHolder.img_more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -124,7 +148,6 @@ public class MeetupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     case R.id.mn_edit:
                                         ActivityEditMeetup.jobj=jsonObject;
                                         Intent intent=new Intent(context,ActivityEditMeetup.class);
-
                                         mFragment.startActivityForResult(intent,300);
                                         break;
                                 }

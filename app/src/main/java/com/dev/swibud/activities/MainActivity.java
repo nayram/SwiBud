@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity
         setFragmentContent(fragmentDisplayFriendLocations, Constants.DISPLAY_FRIENDS_ON_MAP);
 
         boolean isSendbirdConnect=GeneralFunctions.isSendBirdConnected(this);
+
         Log.d(TAG,String.valueOf(isSendbirdConnect));
         if (!isSendbirdConnect){
             boolean isSendBirdLogin=GeneralFunctions.isSendBirdLogin(this);

@@ -160,6 +160,7 @@ public class Devless extends AppCompatActivity implements Serializable{
         POSTAPI postapi = retrofit.create(POSTAPI.class);
         Call<ResponseBody> result = postapi.sendPosts("db?table="+tableName,
                 token, devlessUserToken ,DevlessBuilder.createPostBody(tableName, dataToAdd));
+//        Log.d(TAG,result.toString());
 
         result.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -487,14 +488,11 @@ public class Devless extends AppCompatActivity implements Serializable{
         POSTAPI postapi = retrofit.create(POSTAPI.class);
         Call<ResponseBody> result = postapi.sendPosts("rpc?action="+ actionName,
                 token,devlessUserToken, DevlessBuilder.callBodyBuilder(serviceName, params));
-        Log.d(TAG,"token "+token);
-        Log.d(TAG,"devlessToken "+devlessUserToken);
 
         result.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    Log.d("DevlessEnque",new Gson().toJson(response));
                     requestResponseresponse.onSuccess( new ResponsePayload( response.body().string()));
 
                 } catch (IOException e) {

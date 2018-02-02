@@ -473,7 +473,9 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
     }
 
     void createMeetupService(){
+
         pgCreateMeetup.setVisibility(View.VISIBLE);
+
         Map<String,Object> params=new HashMap<>();
         params.put("time",edtTime.getText().toString());
         params.put("date",edtDate.getText().toString());
@@ -487,8 +489,6 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
             params.put("latitude",latlng.latitude);
             params.put("longitude",latlng.longitude);
         }
-
-
 
         App.devless.postData("meetups", "meetup", params, new PostDataResponse() {
             @Override
@@ -519,8 +519,6 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                     pgCreateMeetup.setVisibility(View.GONE);
 
                 }
-
-
             }
 
             @Override

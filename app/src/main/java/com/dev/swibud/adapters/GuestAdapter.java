@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.dev.swibud.R;
+import com.dev.swibud.activities.ActivityGuests;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.viewholders.GuestViewHolder;
 
@@ -29,10 +30,13 @@ public class GuestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     JSONArray guestArray;
     Context context;
     String TAG=getClass().getName();
+    boolean isOwner;
+    public  ActivityGuests activityGuests;
 
-    public GuestAdapter(JSONArray guestArray, Context context) {
+    public GuestAdapter(JSONArray guestArray, Context context,boolean isOwner) {
         this.guestArray = guestArray;
         this.context = context;
+        this.isOwner=isOwner;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class GuestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof GuestViewHolder){
             try {
                final JSONObject obj=guestArray.getJSONObject(position);
@@ -59,37 +63,52 @@ public class GuestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     ((GuestViewHolder) holder).setUsername(username);
                 }
 
-                ((GuestViewHolder) holder).btnRemovePerson.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            ((GuestViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                            App.devless.delete("meetup", "invite", obj.getString("id"), new DeleteResponse() {
-                                @Override
-                                public void onSuccess(ResponsePayload response) {
-                                    ((GuestViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                    Log.d(TAG,response.toString());
+                if (!isOwner){
+                    ((GuestViewHolder) holder).showStatus(true);
+                    ((GuestViewHolder) holder).setStatusText(obj.getInt("accepted"));
+                }else{
+                    ((GuestViewHolder) holder).btnRemovePerson.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View view) {
+                            try {
+                                ((GuestViewHolder) holder).btnRemovePerson.setVisibility(View.GONE);
+                                ((GuestViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                                App.devless.delete("meetups", "invites", obj.getString("id"), new DeleteResponse() {
+                                    @Override
+                                    public void onSuccess(ResponsePayload response) {
+                                        ((GuestViewHolder) holder).progressBar.setVisibility(View.GONE);
+                                        ((GuestViewHolder) holder).btnRemovePerson.setVisibility(View.VISIBLE);
+                                        Log.d(TAG,response.toString());
+                                        guestArray.remove(position);
+                                        GuestAdapter.this.notifyDataSetChanged();
+                                        activityGuests.setGuestArray(guestArray);
 
-                                }
+                                    }
 
-                                @Override
-                                public void onFailed(ErrorMessage errorMessage) {
-                                    ((GuestViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                    Log.d(TAG,errorMessage.toString());
-                                }
+                                    @Override
+                                    public void onFailed(ErrorMessage errorMessage) {
+                                        ((GuestViewHolder) holder).progressBar.setVisibility(View.GONE);
+                                        ((GuestViewHolder) holder).btnRemovePerson.setVisibility(View.VISIBLE);
+                                        Log.d(TAG,errorMessage.toString());
+                                    }
 
-                                @Override
-                                public void userNotAuthenticated(ErrorMessage message) {
-                                    ((GuestViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                    Log.d(TAG,message.toString());
+                                    @Override
+                                    public void userNotAuthenticated(ErrorMessage message) {
+                                        ((GuestViewHolder) holder).progressBar.setVisibility(View.GONE);
+                                        ((GuestViewHolder) holder).btnRemovePerson.setVisibility(View.VISIBLE);
+                                        Log.d(TAG,message.toString());
 
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                view.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
+
 
 
             }catch (JSONException ex){
@@ -110,6 +129,11 @@ public class GuestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void addData(JSONArray payload) {
         guestArray=payload;
+        notifyDataSetChanged();
+    }
+
+    public void updateParticipants(JSONArray jsonArray) {
+        guestArray=jsonArray;
         notifyDataSetChanged();
     }
 }

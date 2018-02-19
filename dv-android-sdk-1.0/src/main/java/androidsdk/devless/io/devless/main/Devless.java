@@ -113,12 +113,12 @@ public class Devless extends AppCompatActivity implements Serializable{
                 try {
 
                     String result = response.body().string();
-                    Log.d(TAG,"Invites response "+response.body().string());
+//                    Log.d(TAG,"Invites response "+response.body().string());
                     boolean bool = DevlessBuilder.checkAuth(result);
                     if (bool){
 
                         int successPull = DevlessBuilder.checkPostSuccess(result);
-                        Log.d(TAG,"Devless Edit "+result);
+             //         Log.d(TAG,"Devless Edit "+result);
                         if(successPull == 1){
                             // successful
                             requestResponseresponse.onSuccess(new ResponsePayload(result));
@@ -172,7 +172,7 @@ public class Devless extends AppCompatActivity implements Serializable{
                     if (bool){
 
                         int successPull = DevlessBuilder.checkPostSuccess(result);
-                        Log.d(TAG,"Devless Edit "+result);
+//                        Log.d(TAG,"Devless Edit "+result);
                         if(successPull == 1){
                             // successful
                             requestResponseresponse.onSuccess(new ResponsePayload(result));
@@ -221,7 +221,7 @@ public class Devless extends AppCompatActivity implements Serializable{
                     boolean bool = DevlessBuilder.checkAuth(result);
                     if (bool){
                         int successPull = DevlessBuilder.checkPostSuccess(result);
-                        Log.d(TAG,"Devless Edit Result "+result);
+//                        Log.d(TAG,"Devless Edit Result "+result);
                         if(successPull == 1){
                             // successful
                             requestResponseresponse.onSuccess(new ResponsePayload(result));
@@ -396,7 +396,7 @@ public class Devless extends AppCompatActivity implements Serializable{
             public void onSuccess(ResponsePayload response) {
 
                 try {
-                    Log.e("phone number", response.toString());
+//                    Log.e("phone number", response.toString());
                     JSONObject JO = new JSONObject(response.toString());
                     String payload = JO.getString("payload");
                     JSONObject payloadObject = new JSONObject(payload);

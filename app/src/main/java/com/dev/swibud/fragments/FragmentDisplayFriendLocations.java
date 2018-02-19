@@ -77,6 +77,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
@@ -159,17 +160,30 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         pDialog.setCancelable(false);
         pDialog.setMessage("Loading...");
 
+        Log.d(TAG,"Firsbase Instanse ID "+FirebaseInstanceId.getInstance().getToken());
+
+        if (GeneralFunctions.getFCMToken() ==null){
+            String token= FirebaseInstanceId.getInstance().getToken();
+            if (token !=null){
+                checkRegAvailability(token);
+            }
+        }else{
+            Log.d(TAG,"Firebase Instance ID "+GeneralFunctions.getFCMToken());
+        }
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 //        setUpGClient();setUpGClient
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         getLocationPermission();
         SupportMapFragment fragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
+
+
     }
 
     @Override
@@ -213,13 +227,13 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
             @Override
             public void onSuccess(ResponsePayload response) {
                 mapProgress.setVisibility(View.GONE);
-                Log.d(TAG,response.toString());
+//                Log.d(TAG,response.toString());
                 try {
-                    Log.d("LogUtils",response.toString());
+//                    Log.d("LogUtils",response.toString());
                     JSONObject resp=new JSONObject(response.toString());
-                    Log.d(TAG,resp.toString());
+//                    Log.d(TAG,resp.toString());
                     usersArrayList=new Gson().fromJson(response.toString(),UsersList.class);
-                    Log.d(TAG,usersArrayList.toString());
+//                    Log.d(TAG,usersArrayList.toString());
 
                     for (Users users : usersArrayList.payload){
                         if (users.userDetails.size()>0)
@@ -264,13 +278,13 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
             @Override
             public void onFailed(ErrorMessage errorMessage) {
                 mapProgress.setVisibility(View.GONE);
-                Log.d(TAG,errorMessage.toString());
+//                Log.d(TAG,errorMessage.toString());
             }
 
             @Override
             public void userNotAuthenticated(ErrorMessage message) {
                 mapProgress.setVisibility(View.GONE);
-                Log.d(TAG,message.toString());
+//                Log.d(TAG,message.toString());
             }
         });
     }
@@ -311,7 +325,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
             public void onClick(View v) {
 
                 String userString=GeneralFunctions.getUser(getActivity());
-                Log.d(TAG,userString);
+//                Log.d(TAG,userString);
                 try {
                     final JSONObject object=new JSONObject(userString);
 //                    mSelected.add(object.getString("username"));
@@ -527,7 +541,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG +": ACTIVITY RESULT "+resultCode,data.toString());
+//        Log.d(TAG +": ACTIVITY RESULT "+resultCode,data.toString());
         if (requestCode == REQUEST_CHECK_SETTINGS_GPS && resultCode == Activity.RESULT_OK){
             getMyLocation();
         }
@@ -673,17 +687,18 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         App.devless.postData("location", "user_location", dataToPost, new PostDataResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
-                Log.d(TAG,response.toString());
+//                Log.d(TAG,response.toString());
             }
 
             @Override
             public void onFailed(ErrorMessage errorMessage) {
-                Log.d(TAG,errorMessage.toString());
+//                Log.d(TAG,errorMessage.toString());
             }
+
 
             @Override
             public void userNotAuthenticated(ErrorMessage message) {
-                Log.d(TAG,message.toString());
+//                Log.d(TAG,message.toString());
             }
         });
 
@@ -700,7 +715,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
             public void onSuccess(ResponsePayload response) {
                // hideProgress();
 //                 Toast.makeText(ctx, "Search Success", Toast.LENGTH_SHORT).show();
-                Log.d(TAG+": "+serviceName,response.toString());
+//                Log.d(TAG+": "+serviceName,response.toString());
                 try {
                     JSONObject jsonObject=new JSONObject(response.toString());
                     String userobjParam=GeneralFunctions.getUserExtraDetail(getActivity());
@@ -742,13 +757,14 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         params.put("user_image",GeneralFunctions.getUserImage(getContext()));
         params.put("longitude",mLastKnownLocation.getLongitude());
         params.put("latitude",mLastKnownLocation.getLatitude());
-        Log.d(TAG,params.toString());
+        params.put("fcm_token",FirebaseInstanceId.getInstance().getToken());
+//        Log.d(TAG,params.toString());
         App.devless.postData(serviceName, "user_extra_details", params, new PostDataResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
                 //hideProgress();
                 mapProgress.setVisibility(View.GONE);
-                Log.d(TAG,response.toString());
+                Log.d(TAG,"Save FCM "+response.toString());
             }
 
             @Override
@@ -773,15 +789,16 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         params.put("user_image",GeneralFunctions.getUserImage(getContext()));
         params.put("longitude",mLastKnownLocation.getLongitude());
         params.put("latitude",mLastKnownLocation.getLatitude());
+        final String token=FirebaseInstanceId.getInstance().getToken();
+        params.put("fcm_token",token);
         try {
             int id=proile.getInt("id");
             App.devless.edit(serviceName, "user_extra_details", params,String.valueOf(id), new EditDataResponse() {
                 @Override
                 public void onSuccess(ResponsePayload response) {
                     mapProgress.setVisibility(View.GONE);
-//                    Toast.makeText(ctx, "Update location details", Toast.LENGTH_SHORT).show();
-
-                    Log.d(TAG,response.toString());
+                    Log.d(TAG,"Update FCM "+response.toString());
+                    GeneralFunctions.setFCMToken(token);
                 }
 
                 @Override
@@ -882,5 +899,105 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
     @Override
     public void onClusterItemInfoWindowClick(Users item) {
 
+    }
+
+
+    void updateService(JSONObject proile,String token){
+        Map<String, Object> params = new HashMap<>();
+        params.put("users_id",GeneralFunctions.getUserId());
+        params.put("fcm_reg_id",token);
+        try {
+            int id=proile.getInt("id");
+            App.devless.edit("devless", "user_profile", params,String.valueOf(id), new EditDataResponse() {
+                @Override
+                public void onSuccess(ResponsePayload response) {
+
+                    Log.d(TAG,response.toString());
+                }
+
+                @Override
+                public void onFailed(ErrorMessage errorMessage) {
+
+                }
+
+                @Override
+                public void userNotAuthenticated(ErrorMessage message) {
+
+                    Log.d(TAG,message.toString());
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    void checkRegAvailability(final String token){
+
+//        Toast.makeText(ctx, "Check UserId Availability", Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"CHECK AVAILABILITY");
+        Map<String, Object> params = new HashMap<>();
+        params.put("where","users_id,"+GeneralFunctions.getUserId());
+
+        App.devless.search("devless", "user_profile", params, new SearchResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                Log.d(TAG, "Availabiltty "+response.toString());
+                try {
+                    JSONObject jsonObject=new JSONObject(response.toString());
+                    if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0){
+//                        Toast.makeText(ctx, "Update Location Success", Toast.LENGTH_SHORT).show();
+                        JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
+                        updateService(profile,token);
+                    }else{
+//                        Toast.makeText(ctx, "Save Location Success", Toast.LENGTH_SHORT).show();
+                        saveToService(token);
+                    }
+
+                } catch (JSONException e) {
+                    //hideProgress();
+                    e.printStackTrace();
+
+                }
+            }
+
+
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage errorMessage) {
+                Log.e(TAG,errorMessage.toString());
+            }
+        });
+    }
+
+    void saveToService(final String token){
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("users_id",String.valueOf(GeneralFunctions.getUserId()));
+        params.put("fcm_reg_id",token);
+        Log.d(TAG,params.toString());
+        App.devless.postData("devless", "user_profile", params, new PostDataResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                //hideProgress();
+                Log.d(TAG,response.toString());
+                GeneralFunctions.saveToken(token);
+
+            }
+
+            @Override
+            public void onFailed(ErrorMessage errorMessage) {
+                //hideProgress();
+                Log.d(TAG,errorMessage.toString());
+
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage message) {
+
+                Log.d(TAG,message.toString());
+            }
+        });
     }
 }

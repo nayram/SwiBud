@@ -321,7 +321,7 @@ public class ProfileFragment extends Fragment {
                 try {
                     JSONObject jsonObject=new JSONObject(response.toString());
                     if (GeneralFunctions.getUserExtraDetail(getContext())==null){
-                        if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0){
+                        if (jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).length()>0) {
                             JSONObject profile=jsonObject.getJSONObject(Constants.Payload).getJSONArray(Constants.Result).getJSONObject(0);
                             ExtraUserProfile eup=new ExtraUserProfile(profile.getDouble("latitude"),
                                     profile.getDouble("longitude"),profile.getString("user_image"),profile.getInt("id"));

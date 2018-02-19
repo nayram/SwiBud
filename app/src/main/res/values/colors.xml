@@ -27,5 +27,6 @@
     <!-- Group Channel List -->
     <color name="groupChannelUnreadCountBackground">#7d62df</color>
     <color name="groupChannelUnreadCountText">#ffffff</color>
+    <color name="blue">#00B2EE</color>
 
 </resources>

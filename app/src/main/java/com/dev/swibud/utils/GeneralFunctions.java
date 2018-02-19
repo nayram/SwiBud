@@ -47,7 +47,7 @@ public class GeneralFunctions {
         return sharedPreferences.getString(Constants.User,null);
     }
 
-    public static void saveToken(String token, Context ctx){
+    public static void saveToken(String token){
         SharedPreferences sharedPreferences=App.sp;
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString(Constants.Token,token);
@@ -181,6 +181,31 @@ public class GeneralFunctions {
 
     public static String getChatUrl(String title){
         return App.sp.getString(title,null);
+    }
+
+    public static void setFCMToken(String token){
+        SharedPreferences sharedPreferences=App.sp;
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString(Constants.FCM_TOKEN,token);
+        editor.apply();
+    }
+
+    public static String getFCMToken(){
+        SharedPreferences sharedPreferences=App.sp;
+        return sharedPreferences.getString(Constants.FCM_TOKEN,null);
+
+    }
+
+    public static boolean isVisible(){
+        SharedPreferences sharedPreferences=App.sp;
+        return sharedPreferences.getBoolean(Constants.VISIBLILTY,false);
+    }
+
+    public static void setVisibility(boolean visibility){
+        SharedPreferences sharedPreferences=App.sp;
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean(Constants.VISIBLILTY,visibility);
+        editor.apply();
     }
 
 }

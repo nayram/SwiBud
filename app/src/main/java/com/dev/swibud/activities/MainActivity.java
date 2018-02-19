@@ -12,6 +12,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,8 +23,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,8 @@ import com.dev.swibud.interfaces.MainServiceInterface;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
 import com.dev.swibud.utils.GeneralFunctions;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -87,6 +92,8 @@ public class MainActivity extends AppCompatActivity
     private BaseFragment selectedFragment;
     ProgressDialog pDialog;
 
+    Switch swVisibility;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,12 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(R.layout.switch_layout);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+
+
         Log.d(TAG,"package name: "+getPackageName());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,6 +115,18 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+        swVisibility = (Switch)findViewById(R.id.switchAB);
+
+        swVisibility.setChecked(GeneralFunctions.isVisible());
+
+        swVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                GeneralFunctions.setVisibility(b);
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -174,7 +199,28 @@ public class MainActivity extends AppCompatActivity
                 loginSendBirdUser(body);
             }
 
-        }/*else{
+        }
+
+        TapTargetView.showFor(this,
+                TapTarget.forView(findViewById(R.id.switchAB),
+                        "Ghost Mode", "This feature is to show or hide your location from your friends")
+                        /*.outerCircleColor(R.color.red)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(10)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.red)  // Specify the color of the description text
+                        .textColor(R.color.blue)            // Specify a color for both the title and description text
+                        // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)   */        // Specify a custom drawable to draw as the target
+                        .targetRadius(30),null);
+
+        /*else{
             com.dev.swibud.pojo.User body= new com.dev.swibud.pojo.User();
             body.user_id=Constants.USER_ID;
             body.nickname=headerName.getText().toString();
@@ -206,6 +252,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+
+
+
         return true;
     }
 
@@ -216,10 +266,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }

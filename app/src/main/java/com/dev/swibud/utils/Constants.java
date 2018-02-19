@@ -20,6 +20,9 @@ public  class Constants {
     public static final String SENDBIRD_ACCESS_TOKEN = "send_bird_access_token";
     public static final String EXTRA_NEW_CHANNEL_URL = "group_channel";
     public static final String MEETUPTBL = "meetup";
+    public static final String FCM_SERVER_KEY = "AAAAgVWINuo:APA91bHJIz_34CoK3iivWN6ZUxsnMlmn1hz74604H571iSDiR-1FSbAnS4t9ZboDtTZRgooITTc51pe3GsO4iDHFPJtTNfC5IK_0p_o3ST-maKEgbiuicXy028b9TGOFOOidvGQNtpd1";
+    public static final String MEETUP_INVITATION = "MEETUP_INVITATION";
+    public static final String VISIBLILTY = "visibility";
 
     public static String EXTRA_GROUP_CHANNEL_URL="";
 
@@ -44,4 +47,6 @@ public  class Constants {
 
     public static String MeetupGuests="MeetupGuests";
     public static String dummyTable="tbl_dummy";
+    public static String Invites="invites";
+    public static String FCM_TOKEN="fcm_reg_id";
 }

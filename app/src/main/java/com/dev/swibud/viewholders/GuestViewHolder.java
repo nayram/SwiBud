@@ -34,6 +34,9 @@ public class GuestViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.progress_loading)
     public ProgressBar progressBar;
 
+    @BindView(R.id.tvInvitationStatus)
+     TextView tvInvitationStatus;
+
     public GuestViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);
@@ -52,5 +55,37 @@ public class GuestViewHolder extends RecyclerView.ViewHolder {
                 .load(url)
                 .into(this.guestImage);
     }
+
+    public void  showStatus(boolean status){
+
+        if (status){
+            tvInvitationStatus.setVisibility(View.VISIBLE);
+            btnRemovePerson.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }else{
+            tvInvitationStatus.setVisibility(View.GONE);
+            btnRemovePerson.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    public void setStatusText( int statusText){
+        switch (statusText){
+            case 0:
+                tvInvitationStatus.setText("Pending");
+                break;
+            case 1:
+                tvInvitationStatus.setText("Maybe");
+                break;
+            case 2:
+                tvInvitationStatus.setText("Accepted");
+                break;
+            case 3:
+                tvInvitationStatus.setText("Declined");
+                break;
+
+        }
+    }
+
 
 }

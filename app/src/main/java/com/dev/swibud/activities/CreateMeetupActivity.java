@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,23 +25,29 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dev.swibud.adapters.InviteContactAdapter;
-import com.dev.swibud.pojo.Users;
+import com.dev.swibud.pojo.Body;
+import com.dev.swibud.pojo.Data;
+import com.dev.swibud.pojo.RootData;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
 import com.dev.swibud.utils.GeneralFunctions;
-import com.dev.swibud.viewholders.InviteContactViewHolder;
-import com.google.gson.internal.Streams;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.JsonElement;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.dev.swibud.R;
 
 import androidsdk.devless.io.devless.interfaces.GetDataResponse;
 import androidsdk.devless.io.devless.interfaces.PostDataResponse;
+import androidsdk.devless.io.devless.interfaces.SearchResponse;
 import androidsdk.devless.io.devless.messages.ErrorMessage;
 import androidsdk.devless.io.devless.messages.ResponsePayload;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import com.dev.swibud.adapters.PlaceArrayAdapter;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,7 +59,6 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.gson.Gson;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -68,7 +72,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.Inflater;
 
 /**
  * Created by nayrammensah on 9/4/17.
@@ -120,6 +123,8 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
 
     String selectedLocation="";
 
+    ArrayList<String>regTokens=new ArrayList<>();
+
     private boolean loadContacts=false;
     private DatePickerDialog dpd;
     private TimePickerDialog tpd;
@@ -133,7 +138,7 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
     protected DateFormat monthDateFormat = new SimpleDateFormat("MMM d, yyyy");
     Calendar now,selectedCalendar,timeCalendar;
 
-    JSONArray contacts;
+    JSONArray contacts,registrationIds;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -142,6 +147,7 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
     String TAG=getClass().getName();
 
     Map<String,JSONObject> selectedInvites=new HashMap<>();
+    Map<Integer, String> mapRegisId=new HashMap<Integer, String>();
     Map<String,JSONObject> setInvites=new HashMap<>();
 
     LatLng latlng;
@@ -203,6 +209,8 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                 now.get(Calendar.MINUTE),
                 false
         );
+
+        registrationIds=new JSONArray();
 
         bottom_sheet_toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_action_close,null));
         bottom_sheet_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -442,12 +450,22 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
 
     public void addSelectedContact(int id,JSONObject object){
         selectedInvites.put(String.valueOf(id),object);
+        try {
+           JSONObject userObj=object.getJSONArray("userDetails").getJSONObject(0);
+
+            mapRegisId.put( id,userObj.getString("fcm_token"));
+
+        }catch (JSONException ex){
+            ex.printStackTrace();
+        }
+
         Log.d(TAG,"Selected Contacts "+selectedInvites.size());
 
     }
 
     public void removeSelectedContact(int id){
         selectedInvites.remove(String.valueOf(id));
+        mapRegisId.remove(id);
         Log.d(TAG,"Selected Contacts "+selectedInvites.size());
     }
     
@@ -509,7 +527,14 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                             invites.put("completed",0);
                             invitesArralist.add(invites);
                         }
-                        addInvites(invitesArralist);
+                        Map<String,Object> hostInvites=new HashMap<>();
+                        hostInvites.put("meetups_meetup_id",meetupId);
+                        hostInvites.put("users_id",GeneralFunctions.getUserId());
+                        hostInvites.put("accepted",1);
+                        hostInvites.put("completed",0);
+
+                        invitesArralist.add(hostInvites);
+                        addInvites(invitesArralist,meetupId);
 
                     }else{
                         pgCreateMeetup.setVisibility(View.GONE);
@@ -537,18 +562,20 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
         });
     }
 
-    void addInvites(ArrayList<Map<String,Object>> param){
+    void addInvites(ArrayList<Map<String,Object>> param , final int meetupId){
         App.devless.postMassData("meetups", "invites", param, new PostDataResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
-
                 Log.d(TAG,response.toString());
-                pgCreateMeetup.setVisibility(View.GONE);
+//                pgCreateMeetup.setVisibility(View.GONE);
                 try {
                     JSONObject res=new JSONObject(response.toString());
                     if (res.getJSONObject(Constants.Payload).has(Constants.EntryId)){
+                        FirebaseMessaging.getInstance().subscribeToTopic(Constants.MEETUP+"_"+String.valueOf(meetupId));
+
                         setResult(RESULT_OK);
-                        finish();
+                        sendNotification(meetupId);
+//                        finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -569,6 +596,137 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                 pgCreateMeetup.setVisibility(View.GONE);
                 Log.d(TAG,message.toString());
 
+            }
+        });
+    }
+
+    void sendNotification(final int meetup_id){
+        Map<String, Object> params = new HashMap<>();
+        params.put("where", "id,"+String.valueOf(meetup_id));
+
+
+        App.devless.search("GetMeetup", "profile", params, new SearchResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                Log.d(TAG,response.toString());
+
+                try {
+                    JSONObject object=new JSONObject(response.toString());
+
+                    if (object.getInt("status_code")==1001){
+
+                        /*JSONObject root = new JSONObject();
+                        JSONObject body = new JSONObject();
+                        JSONObject data = new JSONObject();
+
+                        Data reqData=new Data(Constants.MEETUP_INVITATION,"Contents");
+                        Body reqBody=new Body();
+
+
+                        JSONObject content= object.getJSONArray(Constants.Payload).getJSONObject(0);
+                        data.put("type", Constants.MEETUP_INVITATION);
+
+                        data.put("content", content);*/
+
+
+                        String name="";
+                        String user= GeneralFunctions.getUser(CreateMeetupActivity.this);
+
+                        JSONObject userJson= new JSONObject(user);
+
+                        if (userJson.getString("first_name")!=null && !userJson.getString("first_name").equals("null") )
+                            name=" by "+userJson.getString("first_name");
+
+                        String message="You've been invited to a meetup"+name;
+                        /*reqBody.message=message;
+
+
+                        body.put("body", message);
+                        body.put("title","Meet Up - "+edtTitle.getText().toString());
+                        root.put("data", data);
+                        root.put("notification", body);*/
+
+                        int index=0;
+                        String tokens="";
+
+                        for (Map.Entry<Integer, String> entry : mapRegisId.entrySet())
+                        {
+
+                            if (!entry.getValue().equalsIgnoreCase("null")) {
+                                if (index == 0) {
+                                    tokens = entry.getValue();
+                                } else {
+                                    tokens = tokens + "," + entry.getValue();
+                                }
+                            }
+
+                            index++;
+
+                        }
+
+                        String token=GeneralFunctions.getFCMToken();
+                        if (token != null) {
+                            registrationIds.put(token);
+                            regTokens.add(token);
+                            if (!token.isEmpty())
+                            tokens=tokens+","+token;
+                            else tokens=token;
+                        }
+                        String title="Meet Up - "+edtTitle.getText().toString();
+
+                        App.messagingService.sendFCMNotificationMeetupInvite(Constants.MEETUP_INVITATION,title,
+                                    message,tokens,String.valueOf(meetup_id)).enqueue(new Callback<JSONObject>() {
+                            @Override
+                            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                                pgCreateMeetup.setVisibility(View.GONE);
+                                Log.d(TAG,response.toString());
+                            }
+
+                            @Override
+                            public void onFailure(Call<JSONObject> call, Throwable t) {
+                                t.printStackTrace();
+
+                            }
+                        });
+
+                        /*root.put("registration_id", registrationIds);
+                        Log.d(TAG,String.valueOf(root));
+                        RootData rootData=new RootData(reqData,reqBody,regTokens);
+
+                        App.messagingService.sendDeviceSpecificMessage(rootData).enqueue(new Callback<JSONObject>() {
+                            @Override
+                            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                                pgCreateMeetup.setVisibility(View.GONE);
+                                Log.d(TAG,response.toString());
+
+//                                toStringToast.makeText(CreateMeetupActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+//                                finish();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<JSONObject> call, Throwable t) {
+                                pgCreateMeetup.setVisibility(View.GONE);
+                                Toast.makeText(CreateMeetupActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                t.printStackTrace();
+
+                            }
+                        });*/
+
+                    }
+
+                } catch (JSONException e) {
+                    pgCreateMeetup.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage errorMessage) {
+                pgCreateMeetup.setVisibility(View.GONE);
+                Log.d(TAG,errorMessage.toString());
             }
         });
     }

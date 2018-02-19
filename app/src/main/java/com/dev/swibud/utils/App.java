@@ -23,6 +23,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -35,6 +36,7 @@ public class App extends MultiDexApplication {
     public static Devless devless;
     public static SharedPreferences sp;
     public static SwibudServices swibudServices;
+    public static MessagingService messagingService;
 
 //    public static Configuration.Builder builder;
     @Override
@@ -49,8 +51,26 @@ public class App extends MultiDexApplication {
         MediaManager.init(this, config);
         Realm.init(this);
         SendBird.init("96E3CA61-7EB5-4463-90AB-8399D6C12524", context);
-
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient httpClient = new OkHttpClient();
+
+        OkHttpClient.Builder fcmClient = new OkHttpClient.Builder();
+
+       /* fcmClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+
+                // Request customization: add request headers
+                Request.Builder requestBuilder = original.newBuilder()
+                        .header("Authorization", "key="+Constants.FCM_SERVER_KEY); // <-- this is the important line
+                Request request = requestBuilder.build();
+                return chain.proceed(request);
+            }
+        });*/
+        fcmClient.addInterceptor(logging);
+        OkHttpClient fcmHttpClient = fcmClient.build();
 
         try{
             httpClient.networkInterceptors().add(new Interceptor() {
@@ -74,6 +94,17 @@ public class App extends MultiDexApplication {
                 .build();
 
         swibudServices=retrofit.create(SwibudServices.class);
+
+        Retrofit fcmRetrofit=new Retrofit.Builder()
+                .baseUrl(MessagingService.domain)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(fcmHttpClient)
+                .build();
+
+        messagingService=fcmRetrofit.create(MessagingService.class);
+
+
+
 /*
         Configuration.Builder builder = new Configuration.Builder(context);
         builder.firebaseRootPath("prod");

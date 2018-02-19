@@ -109,14 +109,16 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     ProgressDialog pDialog;
 
-    @OnClick(R.id.fabNext) void next(){
+    @OnClick(R.id.fabNext) void next() {
 
         if (!edtPhone.getText().toString().trim().isEmpty() && edtPhone.getText().toString().trim().length() <=10) {
+            Log.d(TAG,"Phone Number "+ccp.getFullNumberWithPlus() + edtPhone.getText().toString());
+
             pDialog.show();
             if (!isVerificationStage){
-                isVerificationStage=true;
+                Toast.makeText(ctx, ccp.getFullNumberWithPlus() + edtPhone.getText().toString(), Toast.LENGTH_SHORT).show();
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        ccp.getFullNumber() + edtPhone.getText().toString(),        // Phone number to verify
+                        ccp.getFullNumberWithPlus() + edtPhone.getText().toString(),        // Phone number to verify
                         60,                 // Timeout duration
                         TimeUnit.SECONDS,   // Unit of timeout
                         getActivity(),               // Activity (for callback binding)
@@ -170,6 +172,7 @@ public class PhoneNumberAuthFragment extends Fragment {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
                 Log.d(TAG, "onVerificationCompleted:" + credential);
+                isVerificationStage=true;
                 llPhoneNumber.setVisibility(View.GONE);
                 tvCaption.setText("Enter verification code");
                 llVerification.setVisibility(View.VISIBLE);
@@ -180,7 +183,7 @@ public class PhoneNumberAuthFragment extends Fragment {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Log.w(TAG, "onVerificationFailed", e);
+                Log.e(TAG, "onVerificationFailed", e);
                 pDialog.dismiss();
 
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
@@ -189,8 +192,10 @@ public class PhoneNumberAuthFragment extends Fragment {
                     tvCaption.setText("Enter your phone number :");
                     llVerification.setVisibility(View.GONE);
                     llPhoneNumber.setVisibility(View.VISIBLE);
+                    Log.e(TAG, "Credentials");
                     Toast.makeText(getActivity(), "Invalid phone number", Toast.LENGTH_SHORT).show();
                 } else if (e instanceof FirebaseTooManyRequestsException) {
+                    Log.e(TAG, "Too many");
                     Toast.makeText(getActivity(), "Quota exceeded.", Toast.LENGTH_SHORT).show();;
                 }
             }

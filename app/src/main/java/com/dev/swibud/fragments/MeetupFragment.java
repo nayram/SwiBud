@@ -20,11 +20,16 @@ import com.dev.swibud.activities.CreateMeetupActivity;
 import com.dev.swibud.adapters.MeetupAdapter;
 import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
+import com.dev.swibud.utils.GeneralFunctions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import androidsdk.devless.io.devless.interfaces.GetDataResponse;
+import androidsdk.devless.io.devless.interfaces.SearchResponse;
 import androidsdk.devless.io.devless.messages.ErrorMessage;
 import androidsdk.devless.io.devless.messages.Payload;
 import androidsdk.devless.io.devless.messages.ResponsePayload;
@@ -47,7 +52,7 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
     SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.progress_bar_profile)
-    ProgressBar progress_bar;
+    public ProgressBar progress_bar;
     @OnClick(R.id.createMeetup) void newMeetup(){
         startActivityForResult(new Intent(getActivity(), CreateMeetupActivity.class),120);
 
@@ -71,12 +76,13 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
     void loadMeetups(){
-        App.devless.getData("MeetupService", "dummyTable", new GetDataResponse() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("where", "users_id,"+String.valueOf(GeneralFunctions.getUserId()));
+
+        App.devless.search("TestGravity", "gravity", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
-                Log.d(TAG,response.toString());
                 progress_bar.setVisibility(View.GONE);
-                Log.d(TAG,response.toString());
                 swipeRefreshLayout.setRefreshing(false);
                 try {
                     JSONObject object=new JSONObject(response.toString());
@@ -89,25 +95,15 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
 
                     e.printStackTrace();
                 }
-
             }
 
             @Override
-            public void onFailed(ErrorMessage errorMessage) {
-                Log.d(TAG,errorMessage.toString());
+            public void userNotAuthenticated(ErrorMessage errorMessage) {
                 progress_bar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
-
-            }
-
-            @Override
-            public void userNotAuthenticated(ErrorMessage message) {
-                Log.d(TAG,message.toString());
-                progress_bar.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);
-
             }
         });
+
     }
 
     @Override
@@ -125,23 +121,12 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
         return false;
     }
 
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-        Log.d(TAG,requestCode+"");
-        if (requestCode == 120 ){
-            swipeRefreshLayout.setRefreshing(true);
-//            progress_bar.setVisibility(View.VISIBLE);
-            loadMeetups();
-        }
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==120){
-            swipeRefreshLayout.setRefreshing(true);
+        if (requestCode==120 && resultCode==Activity.RESULT_OK){
+            progress_bar.setVisibility(View.VISIBLE);
             loadMeetups();
         }
     }

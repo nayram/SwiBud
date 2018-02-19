@@ -36,6 +36,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * is initially generated so this is where you would retrieve the token.
      */
     // [START refresh_token]
+
+
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.
@@ -45,6 +47,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
+        sendRegistrationToServer(refreshedToken);
 
         SendBird.registerPushTokenForCurrentUser(refreshedToken, new SendBird.RegisterPushTokenWithStatusHandler() {
             @Override
@@ -58,7 +61,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
                 }else if (ptrs==SendBird.PushTokenRegistrationStatus.SUCCESS){
 
-                    sendRegistrationToServer(refreshedToken);
+
                 }
             }
         });
@@ -75,7 +78,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
-
+        checkUserIdAvailability(token);
 
     }
 
@@ -83,10 +86,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     void updateService(JSONObject proile,String token){
         Map<String, Object> params = new HashMap<>();
         params.put("users_id",GeneralFunctions.getUserId());
-        params.put("fcm_token",token);
+        params.put("fcm_reg_id",token);
         try {
             int id=proile.getInt("id");
-            App.devless.edit("UserExraDetails", "user_extra_details", params,String.valueOf(id), new EditDataResponse() {
+            App.devless.edit("devless", "user_profile", params,String.valueOf(id), new EditDataResponse() {
                 @Override
                 public void onSuccess(ResponsePayload response) {
 
@@ -117,9 +120,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         Map<String, Object> params = new HashMap<>();
         params.put("where","users_id,"+GeneralFunctions.getUserId());
 
-        App.devless.search("UserExraDetails", "user_extra_details", params, new SearchResponse() {
+        App.devless.search("devless", "user_profile", params, new SearchResponse() {
             @Override
             public void onSuccess(ResponsePayload response) {
+
 
                 try {
                     JSONObject jsonObject=new JSONObject(response.toString());
@@ -141,38 +145,42 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                 } catch (JSONException e) {
                     //hideProgress();
                     e.printStackTrace();
+
                 }
             }
 
-            void saveToService(String token){
-                Map<String, Object> params = new HashMap<>();
-                params.put("users_id",String.valueOf(GeneralFunctions.getUserId()));
-                params.put("fcm_token",token);
-                Log.d(TAG,params.toString());
-                App.devless.postData("UserExraDetails", "user_extra_details", params, new PostDataResponse() {
-                    @Override
-                    public void onSuccess(ResponsePayload response) {
-                        //hideProgress();
-                        Log.d(TAG,response.toString());
-                    }
 
-                    @Override
-                    public void onFailed(ErrorMessage errorMessage) {
-                        //hideProgress();
-                        Log.d(TAG,errorMessage.toString());
-                    }
-
-                    @Override
-                    public void userNotAuthenticated(ErrorMessage message) {
-
-                        Log.d(TAG,message.toString());
-                    }
-                });
-            }
 
             @Override
             public void userNotAuthenticated(ErrorMessage errorMessage) {
                 Log.d(TAG,errorMessage.toString());
+            }
+        });
+    }
+
+    void saveToService(String token){
+        Map<String, Object> params = new HashMap<>();
+        params.put("users_id",String.valueOf(GeneralFunctions.getUserId()));
+        params.put("fcm_reg_id",token);
+        Log.d(TAG,params.toString());
+        App.devless.postData("devless", "user_profile", params, new PostDataResponse() {
+            @Override
+            public void onSuccess(ResponsePayload response) {
+                //hideProgress();
+                Log.d(TAG,response.toString());
+
+            }
+
+            @Override
+            public void onFailed(ErrorMessage errorMessage) {
+                //hideProgress();
+                Log.d(TAG,errorMessage.toString());
+            }
+
+            @Override
+            public void userNotAuthenticated(ErrorMessage message) {
+
+                Log.d(TAG,message.toString());
             }
         });
     }

@@ -1,11 +1,13 @@
 package com.dev.swibud.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -49,6 +51,9 @@ public class AllUsers extends BaseActivity {
     public static JSONArray participant_array;
 
     String TAG=getClass().getName();
+    private int meetup_id;
+
+    int resultStatus=1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,11 +67,13 @@ public class AllUsers extends BaseActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                setResult(1101);
+                finish();
                 onBackPressed();
             }
         });
 
-        setSupportActionBar(toolbar);
         setTitle("Add Guests");
         DividerItemDecoration  dividerItemDecoration = new DividerItemDecoration(getResources().getDrawable(R.drawable.divider));
 
@@ -75,10 +82,11 @@ public class AllUsers extends BaseActivity {
         rec_guests.addItemDecoration(dividerItemDecoration);
 
         progressBar.setVisibility(View.VISIBLE);
-//
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("meetup_id", "18");
 
+        Bundle bundle=getIntent().getExtras();
+        if (bundle !=null){
+            meetup_id=bundle.getInt("meetup_id");
+        }
 
         App.devless.getData("users", "devlessUser", new GetDataResponse() {
             @Override
@@ -87,7 +95,9 @@ public class AllUsers extends BaseActivity {
                 try {
                     JSONObject resp=new JSONObject(response.toString());
                     contacts=resp.getJSONArray("payload");
-                    GuestInviteAdapter adapter=new GuestInviteAdapter(rec_guests.getContext(),contacts,participant_array);
+                    removeItem(1);
+                    removeItem(GeneralFunctions.getUserId());
+                    GuestInviteAdapter adapter=new GuestInviteAdapter(AllUsers.this,contacts,participant_array,meetup_id);
                     rec_guests.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -111,5 +121,51 @@ public class AllUsers extends BaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        setResult(1101);
+        finish();
+    }
 
+    public void showProgressBar(boolean status){
+        if (status){
+            progressBar.setVisibility(View.VISIBLE);
+        }else{
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        super.onOptionsMenuClosed(menu);
+        setResult(1101);
+        finish();
+    }
+
+    void removeItem(int id){
+        for (int i=0;i<contacts.length();i++){
+            try {
+                if (contacts.getJSONObject(i).getInt("id")==id){
+                    contacts.remove(i);
+                    break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setCallbackResult(int status){
+        Log.d(TAG,"Status "+status);
+        resultStatus=status;
+        Intent intent=new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putInt("updateGuest",1102);
+        intent.putExtras(bundle);
+        sendBroadcast(intent);
+        setResult(status);
+    }
 }

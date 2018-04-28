@@ -2,6 +2,7 @@ package com.dev.swibud.activities;
 
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity
     ProgressDialog pDialog;
 
     Switch swVisibility;
-
+    TextView tvActionBarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
 
+        tvActionBarTitle=(TextView)findViewById(R.id.action_bar_title);
         swVisibility = (Switch)findViewById(R.id.switchAB);
 
         swVisibility.setChecked(GeneralFunctions.isVisible());
@@ -125,6 +128,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 GeneralFunctions.setVisibility(b);
+                if (b)
+                Toast.makeText(MainActivity.this, "Visibility mode activated", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -133,10 +138,13 @@ public class MainActivity extends AppCompatActivity
         navView=navigationView.getHeaderView(0);
         headerName=(TextView)navView.findViewById(R.id.tvNavName);
         imgHeader=(CircleImageView)navView.findViewById(R.id.imgNav);
+        imgHeader.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
         String user=GeneralFunctions.getUser(this);
         try {
             userObj=new JSONObject(user);
+            if(!userObj.getString("first_name").equalsIgnoreCase("null"))
             headerName.setText(userObj.getString("first_name")+" "+userObj.getString("last_name"));
+
             if (userObj.has("username")){
                 Constants.USER_ID=userObj.getString("username");
             }else{
@@ -200,10 +208,11 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
-
-        TapTargetView.showFor(this,
-                TapTarget.forView(findViewById(R.id.switchAB),
-                        "Ghost Mode", "This feature is to show or hide your location from your friends")
+        if (!GeneralFunctions.tutorialShown()){
+            GeneralFunctions.setTutorialVisibility(true);
+            TapTargetView.showFor(this,
+                    TapTarget.forView(findViewById(R.id.switchAB),
+                            "Visibility Mode", "This feature is to show or hide your location from your friends")
                         /*.outerCircleColor(R.color.red)      // Specify a color for the outer circle
                         .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
                         .targetCircleColor(R.color.white)   // Specify a color for the target circle
@@ -218,8 +227,9 @@ public class MainActivity extends AppCompatActivity
                         .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                         .tintTarget(true)                   // Whether to tint the target view's color
                         .transparentTarget(false)   */        // Specify a custom drawable to draw as the target
-                        .targetRadius(30),null);
+                            .targetRadius(30),null);
 
+        }
         /*else{
             com.dev.swibud.pojo.User body= new com.dev.swibud.pojo.User();
             body.user_id=Constants.USER_ID;
@@ -251,7 +261,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
 
 
 
@@ -280,7 +290,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
             setTitle("SwiBud");
-
+            tvActionBarTitle.setText("SwiBud");
 
             setFragmentContent(fragmentDisplayFriendLocations,Constants.DISPLAY_FRIENDS_ON_MAP);
 
@@ -289,23 +299,41 @@ public class MainActivity extends AppCompatActivity
            // GeneralFunctions.addFragmentFromRight(fm,frag,R.id.main_content);
         } else if (id == R.id.nav_contacts) {
             setTitle("People");
+            tvActionBarTitle.setText("People");
             setFragmentContent(new FriendsListFragment(),Constants.CONTACTS);
             //GeneralFunctions.addFragmentFromRight(fm,new FriendsListFragment(),R.id.main_content);
 
         } else if (id == R.id.nav_meetups) {
             setTitle("Meetups");
+            tvActionBarTitle.setText("Meetups");
             setFragmentContent(new MeetupFragment(),Constants.MEETUP);
             //GeneralFunctions.addFragmentFromRight(fm,new MeetupFragment(),R.id.main_content);
 
         } else if (id == R.id.nav_account) {
             setTitle("Profile");
+            tvActionBarTitle.setText("Profile");
             setFragmentContent(new Profile_Fragment(),Constants.ACCOUNT);
             //GeneralFunctions.addFragmentFromRight(fm,new Profile_Fragment(),R.id.main_content);
 
         } else if (id == R.id.nav_logout) {
-            GeneralFunctions.logout(MainActivity.this);
-            startActivity(new Intent(MainActivity.this,HomeActivity.class));
-            finish();
+
+            final AlertDialog.Builder alertDialog=new AlertDialog.Builder(this);
+            alertDialog.setTitle("Log out")
+                    .setMessage("Are you sure you want to log out?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            GeneralFunctions.logout(MainActivity.this);
+                            startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                            finish();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            }).show();
+
 
 
         }

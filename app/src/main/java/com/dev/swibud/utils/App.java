@@ -38,14 +38,15 @@ public class App extends MultiDexApplication {
     public static SwibudServices swibudServices;
     public static MessagingService messagingService;
 
+
 //    public static Configuration.Builder builder;
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         Context context=getApplicationContext();
-        sp= getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         devless = new Devless(this, Constants.AppUrl, Constants.token);
+        sp= getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         Map config = new HashMap();
         config.put("cloud_name", "swibud");
         MediaManager.init(this, config);
@@ -53,24 +54,15 @@ public class App extends MultiDexApplication {
         SendBird.init("96E3CA61-7EB5-4463-90AB-8399D6C12524", context);
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient httpClient = new OkHttpClient();
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
+        httpClient.addInterceptor(logging);
         OkHttpClient.Builder fcmClient = new OkHttpClient.Builder();
 
-       /* fcmClient.addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-
-                // Request customization: add request headers
-                Request.Builder requestBuilder = original.newBuilder()
-                        .header("Authorization", "key="+Constants.FCM_SERVER_KEY); // <-- this is the important line
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
-            }
-        });*/
         fcmClient.addInterceptor(logging);
+
         OkHttpClient fcmHttpClient = fcmClient.build();
+
 
         try{
             httpClient.networkInterceptors().add(new Interceptor() {
@@ -85,12 +77,10 @@ public class App extends MultiDexApplication {
             ex.printStackTrace();
         }
 
-
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SwibudServices.domain)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(httpClient.build())
                 .build();
 
         swibudServices=retrofit.create(SwibudServices.class);
@@ -102,21 +92,6 @@ public class App extends MultiDexApplication {
                 .build();
 
         messagingService=fcmRetrofit.create(MessagingService.class);
-
-
-
-/*
-        Configuration.Builder builder = new Configuration.Builder(context);
-        builder.firebaseRootPath("prod");
-        builder.firebase("prod",getResources().getString(R.string.firebase_server_key));
-        builder.facebookLoginEnabled(false)
-                .twitterLoginEnabled(false)
-                .googleLoginEnabled(false);
-        ChatSDK.initialize(builder.build());
-        UserInterfaceModule.activate(getApplicationContext());
-
-        FirebaseModule.activate();
-        FirebaseFileStorageModule.activate();*/
 
 
     }

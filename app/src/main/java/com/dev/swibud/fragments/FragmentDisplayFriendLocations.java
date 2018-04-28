@@ -229,13 +229,15 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
                 mapProgress.setVisibility(View.GONE);
 //                Log.d(TAG,response.toString());
                 try {
-//                    Log.d("LogUtils",response.toString());
+                    Log.d("LogUtils",response.toString());
                     JSONObject resp=new JSONObject(response.toString());
-//                    Log.d(TAG,resp.toString());
+                    Log.d(TAG,"All users "+resp.toString());
                     usersArrayList=new Gson().fromJson(response.toString(),UsersList.class);
-//                    Log.d(TAG,usersArrayList.toString());
+                    Log.d(TAG,"User Array List "+usersArrayList.toString());
 
+                    if (usersArrayList !=null)
                     for (Users users : usersArrayList.payload){
+                        if (users !=null)
                         if (users.userDetails.size()>0)
                             if (users.getId() != GeneralFunctions.getUserId())
                             if (users.getPosition() !=null){
@@ -366,6 +368,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
 
 
     void registerFcm(final Users users ,final String userId){
+
         if (FirebaseInstanceId.getInstance().getToken() == null){
 
             pDialog.dismiss();
@@ -543,7 +546,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
         super.onActivityResult(requestCode, resultCode, data);
 //        Log.d(TAG +": ACTIVITY RESULT "+resultCode,data.toString());
         if (requestCode == REQUEST_CHECK_SETTINGS_GPS && resultCode == Activity.RESULT_OK){
-            getMyLocation();
+            getDeviceLocation();
         }
     }
 
@@ -715,7 +718,7 @@ public class FragmentDisplayFriendLocations extends BaseFragment implements OnMa
             public void onSuccess(ResponsePayload response) {
                // hideProgress();
 //                 Toast.makeText(ctx, "Search Success", Toast.LENGTH_SHORT).show();
-//                Log.d(TAG+": "+serviceName,response.toString());
+                Log.d(TAG,response.toString());
                 try {
                     JSONObject jsonObject=new JSONObject(response.toString());
                     String userobjParam=GeneralFunctions.getUserExtraDetail(getActivity());

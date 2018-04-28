@@ -31,7 +31,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="Upload file"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:visibility="gone"/>
 
         <EditText
             android:id="@+id/edittext_group_chat_message"

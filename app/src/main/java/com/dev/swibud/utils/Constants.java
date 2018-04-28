@@ -23,6 +23,7 @@ public  class Constants {
     public static final String FCM_SERVER_KEY = "AAAAgVWINuo:APA91bHJIz_34CoK3iivWN6ZUxsnMlmn1hz74604H571iSDiR-1FSbAnS4t9ZboDtTZRgooITTc51pe3GsO4iDHFPJtTNfC5IK_0p_o3ST-maKEgbiuicXy028b9TGOFOOidvGQNtpd1";
     public static final String MEETUP_INVITATION = "MEETUP_INVITATION";
     public static final String VISIBLILTY = "visibility";
+    public static final String TUTORIAL_SHOWN = "tutorial_shown_visibility";
 
     public static String EXTRA_GROUP_CHANNEL_URL="";
 

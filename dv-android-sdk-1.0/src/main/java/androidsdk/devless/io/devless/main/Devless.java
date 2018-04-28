@@ -35,7 +35,9 @@ import androidsdk.devless.io.devless.services.DELETEAPISERVICE;
 import androidsdk.devless.io.devless.services.PATCHAPISERVICE;
 import androidsdk.devless.io.devless.services.POSTAPI;
 import androidsdk.devless.io.devless.utils.DevlessBuilder;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -480,12 +482,28 @@ public class Devless extends AppCompatActivity implements Serializable{
     }
 
     public void methodCall(String serviceName, String actionName, List<String> params, final RequestResponse requestResponseresponse) {
-
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpClient.addInterceptor(logging);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(rootUrl + "/api/v1/service/"+ serviceName + "/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
                 .build();
+
         POSTAPI postapi = retrofit.create(POSTAPI.class);
+
+
+       /* if (devlessUserToken.isEmpty()){
+            Log.d(TAG,"Is Empty");
+            SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dev.swibud", Context.MODE_PRIVATE);
+            devlessUserToken=sharedPreferences.getString("devlessUserToken","");
+        }
+
+        Log.d(TAG,"Devless User Token "+devlessUserToken);
+        Log.d(TAG," Token "+token);*/
+
         Call<ResponseBody> result = postapi.sendPosts("rpc?action="+ actionName,
                 token,devlessUserToken, DevlessBuilder.callBodyBuilder(serviceName, params));
 
@@ -650,7 +668,7 @@ public class Devless extends AppCompatActivity implements Serializable{
 
             @Override
             public void userNotAuthenticated(ErrorMessage errorMessage) {
-
+                Log.d(TAG,errorMessage.toString());
             }
         });
     }
@@ -686,7 +704,6 @@ public class Devless extends AppCompatActivity implements Serializable{
 
 
         if(TextUtils.isEmpty(this.where)){
-
             final Call<ResponseBody> result = service.getCalls("db?table=" + tableName + "&size="+this.size+ "&orderBy=" + this.orderBy, token, devlessUserToken);
             result.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -715,7 +732,6 @@ public class Devless extends AppCompatActivity implements Serializable{
                 }
             });
         } else {
-
             final Call<ResponseBody> result = service.getCalls("db?table=" + tableName + "&size="+this.size+ "&where=" + this.where +"&orderBy=" + this.orderBy, token, devlessUserToken);
             result.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -880,7 +896,8 @@ public class Devless extends AppCompatActivity implements Serializable{
             String phoneNumber,
             String firstname,
             String lastname,
-            String others,SharedPreferences sharedPreferences,
+            String others,
+            SharedPreferences sharedPreferences,
             final RequestResponse requestResponse)
     {
        devlessUserToken= sharedPreferences.getString("devlessUserToken","");

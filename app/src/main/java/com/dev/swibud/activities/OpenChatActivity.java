@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dev.swibud.R;
+import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
 import com.dev.swibud.utils.FileUtils;
 import com.dev.swibud.utils.MediaPlayerActivity;
@@ -158,6 +159,8 @@ public class OpenChatActivity extends AppCompatActivity {
             // Get channel URL from GroupChannelListFragment.
             mChannelUrl = extra.getString(Constants.EXTRA_NEW_CHANNEL_URL);
         }
+
+
 
         Log.d(LOG_TAG, mChannelUrl);
 

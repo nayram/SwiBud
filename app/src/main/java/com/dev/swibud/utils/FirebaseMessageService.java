@@ -68,6 +68,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 switch (payload.getString("type")){
                     case Constants.MEETUP_INVITATION:
                             deployMeetupInvitation(data,payload);
+
                         break;
                 }
 

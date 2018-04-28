@@ -320,6 +320,8 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                     contacts=resp.getJSONArray("payload");
                     Log.d(TAG,"Length "+contacts.length());
                     if (contacts.length()>0){
+                        removeItem(1);
+                        removeItem(GeneralFunctions.getUserId());
                         loadContacts=true;
 
                     }
@@ -348,6 +350,20 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
 
             }
         });
+    }
+
+
+    void removeItem(int id){
+        for (int i=0;i<contacts.length();i++){
+            try {
+                if (contacts.getJSONObject(i).getInt("id")==id){
+                    contacts.remove(i);
+                    break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -664,14 +680,14 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
 
                         }
 
-                        String token=GeneralFunctions.getFCMToken();
+                        /*String token=GeneralFunctions.getFCMToken();
                         if (token != null) {
                             registrationIds.put(token);
                             regTokens.add(token);
                             if (!token.isEmpty())
                             tokens=tokens+","+token;
                             else tokens=token;
-                        }
+                        }*/
                         String title="Meet Up - "+edtTitle.getText().toString();
 
                         App.messagingService.sendFCMNotificationMeetupInvite(Constants.MEETUP_INVITATION,title,
@@ -680,6 +696,7 @@ public class CreateMeetupActivity extends AppCompatActivity  implements
                             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                                 pgCreateMeetup.setVisibility(View.GONE);
                                 Log.d(TAG,response.toString());
+                                finish();
                             }
 
                             @Override

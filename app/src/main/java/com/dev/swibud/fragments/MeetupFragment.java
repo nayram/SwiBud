@@ -22,6 +22,7 @@ import com.dev.swibud.utils.App;
 import com.dev.swibud.utils.Constants;
 import com.dev.swibud.utils.GeneralFunctions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,6 +88,8 @@ public class MeetupFragment extends BaseFragment implements SwipeRefreshLayout.O
                 try {
                     JSONObject object=new JSONObject(response.toString());
                     if (object.getInt("status_code")==1001){
+                        JSONArray meetupArray=object.getJSONArray(Constants.Payload);
+
                         adapter=new MeetupAdapter(MeetupFragment.this,object.getJSONArray(Constants.Payload));
                         recView.setAdapter(adapter);
                     }

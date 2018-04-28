@@ -51,6 +51,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import androidsdk.devless.io.devless.interfaces.LoginResponse;
+import androidsdk.devless.io.devless.interfaces.LogoutResponse;
 import androidsdk.devless.io.devless.interfaces.RequestResponse;
 import androidsdk.devless.io.devless.interfaces.SearchResponse;
 import androidsdk.devless.io.devless.interfaces.SignUpResponse;
@@ -111,32 +112,13 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     @OnClick(R.id.fabNext) void next() {
 
-        if (!edtPhone.getText().toString().trim().isEmpty() && edtPhone.getText().toString().trim().length() <=10) {
-            Log.d(TAG,"Phone Number "+ccp.getFullNumberWithPlus() + edtPhone.getText().toString());
-
-            pDialog.show();
-            if (!isVerificationStage){
-                Toast.makeText(ctx, ccp.getFullNumberWithPlus() + edtPhone.getText().toString(), Toast.LENGTH_SHORT).show();
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        ccp.getFullNumberWithPlus() + edtPhone.getText().toString(),        // Phone number to verify
-                        60,                 // Timeout duration
-                        TimeUnit.SECONDS,   // Unit of timeout
-                        getActivity(),               // Activity (for callback binding)
-                        mCallbacks);
-            } else{
-                if (!edtVerification.getText().toString().trim().isEmpty() && edtVerification.getText().toString().trim().length()==6) {
-                    pDialog.show();
-                    mCredential = PhoneAuthProvider.getCredential(mVerificationId, edtVerification.getText().toString());
-                    signInWithPhoneAuthCredential(mCredential);
-                }else {
-                    pDialog.dismiss();
-                    Toast.makeText(getActivity(), "Please provide a valid verification code", Toast.LENGTH_SHORT).show();
-                }
+        App.devless.logout(new LogoutResponse() {
+            @Override
+            public void onLogOutSuccess(ResponsePayload response) {
+                Log.d(TAG,String.valueOf(response));
+                login();
             }
-        }else{
-            pDialog.dismiss();
-            Toast.makeText(getActivity(), "Please provide a valid phone number", Toast.LENGTH_SHORT).show();
-        }
+        });
 
 
     }
@@ -172,12 +154,13 @@ public class PhoneNumberAuthFragment extends Fragment {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
                 Log.d(TAG, "onVerificationCompleted:" + credential);
+                pDialog.dismiss();
                 isVerificationStage=true;
                 llPhoneNumber.setVisibility(View.GONE);
                 tvCaption.setText("Enter verification code");
                 llVerification.setVisibility(View.VISIBLE);
                 edtVerification.setText(credential.getSmsCode());
-                pDialog.show();
+
                 signInWithPhoneAuthCredential(credential);
             }
 
@@ -203,14 +186,19 @@ public class PhoneNumberAuthFragment extends Fragment {
             @Override
             public void onCodeSent(String verificationId,
                                    PhoneAuthProvider.ForceResendingToken token) {
-                Log.d(TAG, "onCodeSent:" + verificationId);
 
+//                super.onCodeSent(verificationId, token);
+                Log.d(TAG, "onCodeSent:" + verificationId);
+                pDialog.dismiss();
                 mVerificationId = verificationId;
                 mResendToken = token;
                 isVerificationStage=true;
                 tvCaption.setText("Enter verification Code");
                 llVerification.setVisibility(View.VISIBLE);
                 llPhoneNumber.setVisibility(View.GONE);
+
+
+
 
             }
         };
@@ -228,6 +216,7 @@ public class PhoneNumberAuthFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
+                            pDialog.show();
                             Log.d("PhoneVERifier", "signInWithCredential:success");
                             signUpUser();
                         } else {
@@ -250,13 +239,13 @@ public class PhoneNumberAuthFragment extends Fragment {
                 edtPhone.getText().toString(),null,null,null
         ));
 
-        Log.d(TAG,"Phone number "+ccp.getFullNumber()+edtPhone.getText().toString());
-
+//        Log.d(TAG,"Phone number "+ccp.getFullNumber()+edtPhone.getText().toString());
+        Log.d(TAG,"password "+ edtPhone.getText().toString());
         App.devless.loginWithPhoneNumberAndPassword(ccp.getFullNumber() + edtPhone.getText().toString(),
                 edtPhone.getText().toString(), App.sp, new LoginResponse() {
             @Override
             public void onLogInSuccess(ResponsePayload payload) {
-                Log.d(TAG,payload.toString());
+                Log.e(TAG,payload.toString());
 
 
                 try {
@@ -326,6 +315,7 @@ public class PhoneNumberAuthFragment extends Fragment {
 
     void signUpUser(){
         //Log.d(TAG,"Phone number "+ccp.getFullNumberWithPlus()+edtPhone.getText().toString());
+        Log.d(TAG,"password "+ edtPhone.getText().toString());
         App.devless.signUpWithPhoneNumberAndPassword(ccp.getFullNumber() + edtPhone.getText().toString(),
                 edtPhone.getText().toString(), App.sp, new SignUpResponse() {
                     @Override
@@ -374,6 +364,37 @@ public class PhoneNumberAuthFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
 
+    }
+
+    void login(){
+        if (!edtPhone.getText().toString().trim().isEmpty() && edtPhone.getText().toString().trim().length() <=10) {
+            Log.d(TAG,"Phone Number "+ccp.getFullNumberWithPlus() + edtPhone.getText().toString());
+
+
+            if (!isVerificationStage){
+                pDialog.show();
+//               isVerificationStage Toast.makeText(ctx, ccp.getFullNumberWithPlus() + edtPhone.getText().toString(), Toast.LENGTH_SHORT).show();
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                        ccp.getFullNumberWithPlus() + edtPhone.getText().toString(),        // Phone number to verify
+                        60,                 // Timeout duration
+                        TimeUnit.SECONDS,   // Unit of timeout
+                        getActivity(),               // Activity (for callback binding)
+                        mCallbacks);
+            } else{
+                if (!edtVerification.getText().toString().trim().isEmpty() && edtVerification.getText().toString().trim().length()==6
+                        && !mVerificationId.isEmpty()) {
+                    pDialog.show();
+                    mCredential = PhoneAuthProvider.getCredential(mVerificationId, edtVerification.getText().toString());
+                    signInWithPhoneAuthCredential(mCredential);
+                }else {
+                    pDialog.dismiss();
+                    Toast.makeText(getActivity(), "Please provide a valid verification code", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }else{
+            pDialog.dismiss();
+            Toast.makeText(getActivity(), "Please provide a valid phone number", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

@@ -208,4 +208,17 @@ public class GeneralFunctions {
         editor.apply();
     }
 
+    public static boolean tutorialShown(){
+
+        SharedPreferences sharedPreferences=App.sp;
+        return sharedPreferences.getBoolean(Constants.TUTORIAL_SHOWN,false);
+    }
+
+    public static void setTutorialVisibility(boolean status){
+        SharedPreferences sharedPreferences=App.sp;
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean(Constants.TUTORIAL_SHOWN,status);
+        editor.apply();
+    }
+
 }
